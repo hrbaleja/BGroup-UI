@@ -1,0 +1,1 @@
+export { default as ForgotPasswordView } from './forgotpassword-view';
