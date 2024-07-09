@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 const api = axios.create({
 
-  baseURL: 'https://apibgroup-hrbalejas-projects.vercel.app/api/v1/',
+  baseURL: 'https://api-bgroup.vercel.app/api/v1/',
   headers: {
     'Content-Type': 'application/json',
   },
