@@ -139,10 +139,6 @@ export default function CompanyView() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        zIndex: 9999, // Ensure it's on top of other content
-                        backgroundColor: 'rgba(255, 255, 255, 0.7)', // Optional: semi-transparent background
-                        width: '100%',
-                        height: '100%',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',}}>
