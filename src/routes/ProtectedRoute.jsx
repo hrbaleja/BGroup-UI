@@ -20,7 +20,7 @@ const ProtectedRoute = ({ children }) => {
 
          const accessToken = Cookies.get('accessToken');
          const refreshToken = Cookies.get('refreshToken');
-         await new Promise(resolve => setTimeout(resolve, 500));
+         // await new Promise(resolve => setTimeout(resolve, 500));
 
          if (accessToken && refreshToken) {
             setIsAuthenticated(true);

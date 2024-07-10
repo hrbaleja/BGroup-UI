@@ -10,6 +10,7 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress for loader
 
 import CompanyService from 'src/services/company/companyService';
 
@@ -33,12 +34,14 @@ export default function CompanyView() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [noData, setNoData] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
 
   const [companies, setCompanies] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [isArchived, setIsArchived] = useState(false);
 
   const fetchCompanies = useCallback(async () => {
+    setIsLoading(true); // Set loading to true before fetching data
     try {
       const response = await CompanyService.getCompanies(!isArchived);
       if (response.length === 0) {
@@ -47,6 +50,8 @@ export default function CompanyView() {
       setCompanies(response);
     } catch (error) {
       console.error('Error fetching companies:', error);
+    } finally {
+      setIsLoading(false); // Set loading to false after fetching data
     }
   }, [isArchived]);
 
@@ -124,25 +129,35 @@ export default function CompanyView() {
                   { id: 'amount', label: 'Amount' },
                   { id: 'lotSize', label: 'Lot Size' },
                   { id: 'isMain', label: 'Category' },
-                  { id: '', label: 'Action',align:'right'  },
+                  { id: '', label: 'Action', align: 'right' },
                 ]}
               />)}
 
               <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((company) => (
-                    <DataTableRow
-                      key={company._id}
-                      company={company}
-                      fetchCompanies={fetchCompanies}
+                {isLoading ? (
+                  <Stack>
+                      <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <CircularProgress />
+                      </Stack>                    
+                  </Stack>
+                ) : (
+                  <>
+                    {dataFiltered
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((company) => (
+                        <DataTableRow
+                          key={company._id}
+                          company={company}
+                          fetchCompanies={fetchCompanies}
+                        />
+                      ))}
+                    <TableEmptyRows
+                      height={77}
+                      emptyRows={emptyRows(page, rowsPerPage, companies.length)}
                     />
-                  ))}
-                <TableEmptyRows
-                  height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, companies.length)}
-                />
-                {(notFound || noData) && <TableNoData query={filterName} />}
+                    {(notFound || noData) && <TableNoData query={filterName} />}
+                  </>
+                )}
               </TableBody>
 
             </Table>
@@ -150,24 +165,25 @@ export default function CompanyView() {
         </Scrollbar>
 
         {!noData && (
-        <TablePagination
-          page={page}
-          component="div"
-          count={companies.length}
-          rowsPerPage={rowsPerPage}
-          onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />)}
+          <TablePagination
+            page={page}
+            component="div"
+            count={companies.length}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handleChangePage}
+            rowsPerPageOptions={[5, 10, 25]}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
 
       </Card>
 
       <NewCompany
         open={openCreateDialog}
         onClose={() => setOpenCreateDialog(false)}
-        fetchCompanies={fetchCompanies} 
-        />
-        
+        fetchCompanies={fetchCompanies}
+      />
+
     </Container>
   );
 }
