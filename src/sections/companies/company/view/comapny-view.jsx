@@ -135,11 +135,9 @@ export default function CompanyView() {
 
               <TableBody>
                 {isLoading ? (
-                  <Stack>
-                      <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                      <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
                         <CircularProgress />
                       </Stack>                    
-                  </Stack>
                 ) : (
                   <>
                     {dataFiltered
