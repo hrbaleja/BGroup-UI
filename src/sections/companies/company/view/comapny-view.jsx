@@ -135,7 +135,17 @@ export default function CompanyView() {
 
               <TableBody>
                 {isLoading ? (
-                      <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                      <Stack sx={{ position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 9999, // Ensure it's on top of other content
+                        backgroundColor: 'rgba(255, 255, 255, 0.7)', // Optional: semi-transparent background
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',}}>
                         <CircularProgress />
                       </Stack>                    
                 ) : (
