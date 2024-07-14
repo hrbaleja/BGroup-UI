@@ -10,7 +10,7 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress for loader
+import CircularProgress from '@mui/material/CircularProgress'; // Add import for CircularProgress
 
 import CompanyService from 'src/services/company/companyService';
 
@@ -25,8 +25,6 @@ import { emptyRows, applyFilter, getComparator } from 'src/components/table/util
 import NewCompany from '../comapny-new';
 import DataTableRow from '../datatable-row';
 
-// ----------------------------------------------------------------------
-
 export default function CompanyView() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -34,14 +32,14 @@ export default function CompanyView() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [noData, setNoData] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
+  const [isLoading, setIsLoading] = useState(true);
 
   const [companies, setCompanies] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [isArchived, setIsArchived] = useState(false);
 
   const fetchCompanies = useCallback(async () => {
-    setIsLoading(true); // Set loading to true before fetching data
+    setIsLoading(true); // Set loading state to true before fetching data
     try {
       const response = await CompanyService.getCompanies(!isArchived);
       if (response.length === 0) {
@@ -51,7 +49,7 @@ export default function CompanyView() {
     } catch (error) {
       console.error('Error fetching companies:', error);
     } finally {
-      setIsLoading(false); // Set loading to false after fetching data
+      setIsLoading(false); // Set loading state to false after data is fetched
     }
   }, [isArchived]);
 
@@ -59,7 +57,6 @@ export default function CompanyView() {
     fetchCompanies();
   }, [fetchCompanies]);
 
-  // Pagination 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -109,44 +106,39 @@ export default function CompanyView() {
         </Stack>
       </Stack>
       <Card>
-        {!noData && (<TableToolbar
-          filterName={filterName}
-          onFilterName={handleFilterByName}
-        />)}
-        <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-
-            <Table sx={{ minWidth: 800 }}>
-              {!noData && (<DataTableHead
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={handleSort}
-                headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'industry', label: 'Industry' },
-                  { id: 'startDate', label: 'Start Date' },
-                  { id: 'endDate', label: 'End Date' },
-                  { id: 'amount', label: 'Amount' },
-                  { id: 'lotSize', label: 'Lot Size' },
-                  { id: 'isMain', label: 'Category' },
-                  { id: '', label: 'Action', align: 'right' },
-                ]}
-              />)}
-
-              <TableBody>
-                {isLoading ? (
-                      <Stack sx={{ position: 'fixed',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',}}>
-                        <CircularProgress />
-                      </Stack>                    
-                ) : (
-                  <>
-                    {dataFiltered
+        {isLoading && <Stack sx={{ justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+          <CircularProgress />
+        </Stack>}
+        {!isLoading && !noData && (
+          <TableToolbar
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+          />
+        )}
+        {!isLoading && (
+          <Scrollbar>
+            <TableContainer sx={{ overflow: 'unset' }}>
+              <Table sx={{ minWidth: 800 }}>
+                {!isLoading && !noData && (
+                  <DataTableHead
+                    order={order}
+                    orderBy={orderBy}
+                    onRequestSort={handleSort}
+                    headLabel={[
+                      { id: 'name', label: 'Name' },
+                      { id: 'industry', label: 'Industry' },
+                      { id: 'startDate', label: 'Start Date' },
+                      { id: 'endDate', label: 'End Date' },
+                      { id: 'amount', label: 'Amount' },
+                      { id: 'lotSize', label: 'Lot Size' },
+                      { id: 'isMain', label: 'Category' },
+                      { id: '', label: 'Action', align: 'right' },
+                    ]}
+                  />
+                )}
+                <TableBody>
+                  {!isLoading &&
+                    dataFiltered
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((company) => (
                         <DataTableRow
@@ -155,20 +147,19 @@ export default function CompanyView() {
                           fetchCompanies={fetchCompanies}
                         />
                       ))}
+                  {!isLoading && (
                     <TableEmptyRows
                       height={77}
                       emptyRows={emptyRows(page, rowsPerPage, companies.length)}
                     />
-                    {(notFound || noData) && <TableNoData query={filterName} />}
-                  </>
-                )}
-              </TableBody>
-
-            </Table>
-          </TableContainer>
-        </Scrollbar>
-
-        {!noData && (
+                  )}
+                  {!isLoading && (notFound || noData) && <TableNoData query={filterName} />}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+        )}
+        {!isLoading && !noData && (
           <TablePagination
             page={page}
             component="div"
@@ -179,15 +170,12 @@ export default function CompanyView() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         )}
-
       </Card>
-
       <NewCompany
         open={openCreateDialog}
         onClose={() => setOpenCreateDialog(false)}
         fetchCompanies={fetchCompanies}
       />
-
     </Container>
   );
 }
