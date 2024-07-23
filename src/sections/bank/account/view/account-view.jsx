@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect,  useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -39,10 +39,10 @@ export default function AccountView() {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [filters, setFilters] = useState({ balanceTypes: [], amount: '' });
 
-  const fetchAccounts = async () => {
+  const fetchAccounts = useCallback(async () => {
     try {
       const filterParams = {
-        page: page + 1,
+        page: page + 1, // Increment page to match backend pagination if needed
         limit: rowsPerPage,
         sortBy: orderBy,
         sortOrder: order,
@@ -50,23 +50,24 @@ export default function AccountView() {
         balanceType: filters.balanceTypes.join(','),
         amountRange: filters.amount,
       };
+  
       const response = await AccountsService.fetchCustomers(filterParams);
       if (response.accounts.length === 0) {
         setNoData(true);
       } else {
         setNoData(false);
+        setCustomer(response.accounts);
+        setTotalCount(response.pagination.totalDocs);
       }
-      setCustomer(response.accounts);
-      setTotalCount(response.pagination.totalDocs);
     } catch (error) {
       console.error('Error fetching accounts:', error);
       setNoData(true);
     }
-  };
-
+  }, [page, rowsPerPage, order, orderBy, filterName, filters]);
+  
   useEffect(() => {
     fetchAccounts();
-  }, [page, rowsPerPage, order, orderBy, filterName, filters]);
+  }, [fetchAccounts]);
 
   const createAccount = async (customerdata, initialBalance) => {
     try {
