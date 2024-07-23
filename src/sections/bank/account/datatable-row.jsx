@@ -2,7 +2,24 @@ import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
 import {
-  Grid, Stack, Button, Dialog, Select, Avatar, Popover, TableRow, MenuItem, TextField, TableCell, Typography, IconButton, InputLabel, FormControl, DialogTitle, DialogContent, DialogActions
+  Grid,
+  Stack,
+  Button,
+  Dialog,
+  Select,
+  Avatar,
+  Popover,
+  TableRow,
+  MenuItem,
+  TextField,
+  TableCell,
+  Typography,
+  IconButton,
+  InputLabel,
+  FormControl,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 
 import TransactionService from 'src/services/bank/transactionService';
@@ -20,7 +37,13 @@ const initialTransactionData = {
 };
 
 export default function DataTableRow({
-  name, avatarUrl, updatedAt, balance, balanceType, id, fetchCustomer
+  name,
+  avatarUrl,
+  updatedAt,
+  balance,
+  balanceType,
+  id,
+  fetchCustomer,
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openTransactionView, setOpenTransactionView] = useState(false);
@@ -41,10 +64,14 @@ export default function DataTableRow({
     }
   }, [id]);
 
-  const handleDetailsClick = useCallback(() => {
-    handleCloseMenu();
-    handleGetTransactions();
-  }, [handleGetTransactions]);
+  const handleDetailsClick = useCallback(
+    (AccoutId) => {
+      console.log('hello');
+      handleCloseMenu();
+      handleGetTransactions(AccoutId);
+    },
+    [handleGetTransactions]
+  );
 
   const handleOpenDialog = useCallback(() => {
     handleCloseMenu();
@@ -58,15 +85,16 @@ export default function DataTableRow({
 
   const handleChange = useCallback((e) => {
     const { name: fieldName, value } = e.target;
-    setTransactionData(prev => ({ ...prev, [fieldName]: value }));
+    setTransactionData((prev) => ({ ...prev, [fieldName]: value }));
   }, []);
 
   const handleSubmit = useCallback(async () => {
     try {
       const updatedTransactionData = { ...transactionData, customerId: id };
-      const response = updatedTransactionData.type === 'deposit'
-        ? await TransactionService.deposit(updatedTransactionData)
-        : await TransactionService.withdraw(updatedTransactionData);
+      const response =
+        updatedTransactionData.type === 'deposit'
+          ? await TransactionService.deposit(updatedTransactionData)
+          : await TransactionService.withdraw(updatedTransactionData);
       console.log('Transaction successful:', response.data);
       handleCloseDialog();
       fetchCustomer();
@@ -81,7 +109,9 @@ export default function DataTableRow({
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" marginLeft={2}>
             <Avatar alt={name} src={avatarUrl} />
-            <Typography variant="subtitle2" noWrap marginLeft={1}>{name}</Typography>
+            <Typography variant="subtitle2" noWrap marginLeft={1}>
+              {name}
+            </Typography>
           </Stack>
         </TableCell>
         <TableCell>{updatedAt}</TableCell>
@@ -104,7 +134,7 @@ export default function DataTableRow({
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{ sx: { width: 140 } }}
       >
-        <MenuItem onClick={handleDetailsClick} sx={{ color: 'info.main' }}>
+        <MenuItem onClick={() => handleDetailsClick(id)} sx={{ color: 'info.main' }}>
           <Iconify icon="eva:info-fill" sx={{ mr: 2 }} />
           Details
         </MenuItem>
@@ -131,7 +161,7 @@ export default function DataTableRow({
         <DialogContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
-              <TextField label='Account Holder' value={name} fullWidth margin="normal" />
+              <TextField label="Account Holder" value={name} fullWidth margin="normal" />
               <TextField
                 label="Amount"
                 name="amount"

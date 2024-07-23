@@ -39,7 +39,7 @@ export default function CompanyView() {
   const [isArchived, setIsArchived] = useState(false);
 
   const fetchCompanies = useCallback(async () => {
-    setIsLoading(true); // Set loading state to true before fetching data
+    setIsLoading(true);
     try {
       const response = await CompanyService.getCompanies(!isArchived);
       if (response.length === 0) {
@@ -49,7 +49,7 @@ export default function CompanyView() {
     } catch (error) {
       console.error('Error fetching companies:', error);
     } finally {
-      setIsLoading(false); // Set loading state to false after data is fetched
+      setIsLoading(false);
     }
   }, [isArchived]);
 
@@ -93,27 +93,26 @@ export default function CompanyView() {
         <Typography variant="h4">Company Information</Typography>
         <Stack direction="row" spacing={2} alignItems="center">
           <Typography>Show Archived:</Typography>
-          <Switch
-            checked={isArchived}
-            onChange={(e) => setIsArchived(e.target.checked)}
-          />
+          <Switch checked={isArchived} onChange={(e) => setIsArchived(e.target.checked)} />
           <Button
             variant="outlined"
             color="inherit"
             startIcon={<Iconify icon="eva:plus-fill" />}
             onClick={() => setOpenCreateDialog(true)}
-          > New</Button>
+          >
+            {' '}
+            New
+          </Button>
         </Stack>
       </Stack>
       <Card>
-        {isLoading && <Stack sx={{ justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
-          <CircularProgress />
-        </Stack>}
+        {isLoading && (
+          <Stack sx={{ justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+            <CircularProgress />
+          </Stack>
+        )}
         {!isLoading && !noData && (
-          <TableToolbar
-            filterName={filterName}
-            onFilterName={handleFilterByName}
-          />
+          <TableToolbar filterName={filterName} onFilterName={handleFilterByName} />
         )}
         {!isLoading && (
           <Scrollbar>

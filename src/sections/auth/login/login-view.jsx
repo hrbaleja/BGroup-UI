@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -28,13 +28,13 @@ const LoginView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState('');
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.size > 0) {
-      setErrors(API_MESSAGES.TOKEN_ERR);
-    }
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams(window.location.search);
+  //   if (searchParams.size > 0) {
+  //     // setErrors(API_MESSAGES.TOKEN_ERR);
+  //   }
 
-  }, []);
+  // }, []);
   const handleLogin = async (event) => {
     event.preventDefault();
     setErrors('');

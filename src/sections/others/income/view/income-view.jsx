@@ -102,11 +102,12 @@ export default function IncomeView() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Income Statement</Typography>
         <Button
-          variant="contained"
+          variant="outlined"
+          color="inherit"
           startIcon={<Iconify icon="eva:plus-fill" />}
           onClick={() => setOpenCreateDialog(true)}
         >
-          New Income
+          New
         </Button>
       </Stack>
 
@@ -126,11 +127,7 @@ export default function IncomeView() {
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <DataTableRow
-                      key={row._id}
-                      income={row}
-                      fetchIncomes={fetchIncomes}
-                    />
+                    <DataTableRow key={row._id} income={row} fetchIncomes={fetchIncomes} />
                   ))}
                 <TableEmptyRows
                   height={77}

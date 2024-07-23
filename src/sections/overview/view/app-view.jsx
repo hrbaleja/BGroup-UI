@@ -2,8 +2,10 @@ import Cookies from 'js-cookie';
 import { faker } from '@faker-js/faker';
 import React, { useState, useEffect, useCallback } from 'react';
 
+// import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Tab, Tabs, Stack } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 import { fCurrency } from 'src/utils/format-number';
@@ -26,12 +28,13 @@ import AppConversionRates from '../app-conversion-rates';
 
 // ----------------------------------------------------------------------
 
-
 export default function AppView() {
   const [taskss, setTasks] = useState([]);
   const [statistics, setStatistics] = useState({});
   const [sectorData, setSectorData] = useState([]);
   const [totalValue, setTotalValue] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
+
   const [chartData1, setChartData1] = useState({
     labels: [],
     series: [],
@@ -41,7 +44,6 @@ export default function AppView() {
     mainSeries: [],
     smeSeries: [],
     companySeries: [],
-
   });
   const username = Cookies.get('username');
 
@@ -68,13 +70,16 @@ export default function AppView() {
   const fetchSector = useCallback(async () => {
     try {
       const sectors = await SectorService.getLatestSectorValues();
-      const formattedData = sectors.map(sector => ({
+      const formattedData = sectors.map((sector) => ({
         label: sector.name,
-        value: parseFloat(sector.value)
+        value: parseFloat(sector.value),
       }));
       setSectorData(formattedData);
       // Calculate total value
-      const sum = formattedData.reduce((accumulator, currentValue) => accumulator + currentValue.value, 0);
+      const sum = formattedData.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.value,
+        0
+      );
       setTotalValue(sum);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -96,7 +101,6 @@ export default function AppView() {
     fetchCompany();
     fetchSector();
     fetchSectorData();
-
   }, [fetchTasks, fetchCompany, fetchSector, fetchSectorData]);
 
   const transformChartData = (data) => {
@@ -126,317 +130,280 @@ export default function AppView() {
     data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     // Get unique dates and sector names
-    const uniqueDates = [...new Set(data.map(item => item.date))];
-    const uniqueSectors = [...new Set(data.map(item => item.name))];
+    const uniqueDates = [...new Set(data.map((item) => item.date))];
+    const uniqueSectors = [...new Set(data.map((item) => item.name))];
 
     // Create series data
-    const series = uniqueSectors.map(sector => ({
+    const series = uniqueSectors.map((sector) => ({
       name: sector,
       type: 'line',
       fill: 'solid',
-      data: uniqueDates.map(date => {
-        const item = data.find(d => d.date === date && d.name === sector);
+      data: uniqueDates.map((date) => {
+        const item = data.find((d) => d.date === date && d.name === sector);
         return item ? item.value : null;
       }),
     }));
 
     return {
-      labels: uniqueDates.map(date => new Date(date).toLocaleDateString()),
+      labels: uniqueDates.map((date) => new Date(date).toLocaleDateString()),
       series,
     };
   };
 
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+
   return (
     <Container maxWidth="xl">
-
-      {/* Welcome Back vari commnet */}
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Hi, {username} Welcome back 👋
-      </Typography>
-
-      <Grid container spacing={3}>
-
-        {/* <Grid xs={12} sm={6} md={3}>
-          < AppWidgetSummary
-            title="Total Amount"
-            total={statistics.amount}
-            color="success"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_galss_money.jpg" />}
-          />
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Hi, {username} Welcome back 👋
+        </Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Tabs value={selectedTab} onChange={handleTabChange}>
+            <Tab label="Amount" />
+            <Tab label="Companies" />
+            <Tab label="Others" />
+          </Tabs>
+        </Stack>
+      </Stack>
+      {selectedTab === 0 && (
+        <Grid container spacing={3}>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Bank Turnover"
+              total={statistics.transactionAmount}
+              color="success"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_galss_money.jpg" />}
+              to="/account"
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Credit Bank Balance"
+              total={statistics.creditBalance || 0}
+              color="info"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_credit.jpg" />}
+              to="/account"
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Debit Bank Balance"
+              total={statistics.debitBalance || 0}
+              color="error"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_debit.jpg" />}
+              to="/account"
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Total Users"
+              total={statistics.user || 0}
+              color="info"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_users.png" />}
+              to="/user"
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={8}>
+            <AppWebsiteVisits
+              title="Sector Values Over Time"
+              subheader="Daily sector value trends"
+              chart={chartData1}
+            />
+          </Grid>
+          <Grid xs={12} md={6} lg={4}>
+            <AppCurrentVisits
+              title={`Current Portflio Value: ${fCurrency(totalValue)}`}
+              chart={{ series: sectorData }}
+            />
+          </Grid>
         </Grid>
+      )}
 
+      {selectedTab === 1 && (
+        <Grid container spacing={3}>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Total Amount"
+              total={statistics.amount}
+              color="success"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_galss_money.jpg" />}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Main Companies"
+              total={statistics.mainCompany}
+              color="warning"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="SME Companies"
+              total={statistics.smeCompany}
+              color="error"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+            />
+          </Grid>
+          <Grid xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Total Users"
+              total={statistics.user || 0}
+              color="info"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_users.png" />}
+            />
+          </Grid>
 
+          <Grid xs={12} md={6} lg={8}>
+            <AppWebsiteVisits
+              title="Total Companies"
+              subheader="Main and SME IPO Count"
+              chart={{
+                labels: chartData.labels,
+                series: [
+                  {
+                    name: 'Main Companies',
+                    type: 'column',
+                    fill: 'solid',
+                    data: chartData.mainSeries,
+                  },
+                  {
+                    name: 'SME Companies',
+                    type: 'area',
+                    fill: 'gradient',
+                    data: chartData.smeSeries,
+                  },
+                  {
+                    name: 'Companies',
+                    type: 'area',
+                    fill: 'gradient',
+                    data: chartData.companySeries,
+                  },
+                ],
+              }}
+            />
+          </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
-          <AppWidgetSummary
-            title="Main Companies"
-            total={statistics.mainCompany}
-            color="warning"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-          />
+          <Grid xs={12} md={6} lg={4}>
+            <AppCurrentVisits
+              title="Current Visits"
+              chart={{
+                series: [
+                  { label: 'America', value: 4344 },
+                  { label: 'Asia', value: 5435 },
+                  { label: 'Europe', value: 1443 },
+                  { label: 'Africa', value: 4443 },
+                ],
+              }}
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={8}>
+            <AppConversionRates
+              title="Conversion Rates"
+              subheader="(+43%) than last year"
+              chart={{
+                series: [
+                  { label: 'Italy', value: 400 },
+                  { label: 'Japan', value: 430 },
+                  { label: 'China', value: 448 },
+                  { label: 'Canada', value: 470 },
+                  { label: 'France', value: 540 },
+                  { label: 'Germany', value: 580 },
+                  { label: 'South Korea', value: 690 },
+                  { label: 'Netherlands', value: 1100 },
+                  { label: 'United States', value: 1200 },
+                  { label: 'United Kingdom', value: 1380 },
+                ],
+              }}
+            />
+          </Grid>
+
+          <Grid xs={12} md={6} lg={4}>
+            <AppCurrentSubject
+              title="Current Subject"
+              chart={{
+                categories: ['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math'],
+                series: [
+                  { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
+                  { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
+                  { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
+                ],
+              }}
+            />
+          </Grid>
         </Grid>
+      )}
 
-        <Grid xs={12} sm={6} md={3}>
-          <AppWidgetSummary
-            title="SME Companies"
-            total={statistics.smeCompany}
-            color="error"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-          />
-        </Grid> */}
+      {selectedTab === 2 && (
+        <Grid container spacing={3}>
+          <Grid xs={12} md={6} lg={8}>
+            <AppTasks title="Tasks" subheader={`You have ${taskss.length} pending tasks`} />
+          </Grid>
 
+          <Grid xs={12} md={6} lg={8}>
+            <AppNewsUpdate
+              title="News Update"
+              list={[...Array(5)].map((_, index) => ({
+                id: faker.string.uuid(),
+                title: faker.person.jobTitle(),
+                description: faker.commerce.productDescription(),
+                image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                postedAt: faker.date.recent(),
+              }))}
+            />
+          </Grid>
 
+          <Grid xs={12} md={6} lg={4}>
+            <AppOrderTimeline
+              title="Order Timeline"
+              list={[...Array(5)].map((_, index) => ({
+                id: faker.string.uuid(),
+                title: [
+                  '1983, orders, $4220',
+                  '12 Invoices have been paid',
+                  'Order #37745 from September',
+                  'New order placed #XF-2356',
+                  'New order placed #XF-2346',
+                ][index],
+                type: `order${index + 1}`,
+                time: faker.date.past(),
+              }))}
+            />
+          </Grid>
 
-
-        <Grid xs={12} sm={6} md={3}>
-          < AppWidgetSummary
-            title="Bank Turnover"
-            total={statistics.transactionAmount}
-            color="success"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_galss_money.jpg" />}
-          />
-        </Grid>
-
-        <Grid xs={12} sm={6} md={3}>
-          <AppWidgetSummary
-            title="Credit Bank Balance"
-            total={statistics.creditBalance || 0}
-            color="info"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_credit.jpg" />}
-          />
-        </Grid>
-
-        <Grid xs={12} sm={6} md={3}>
-          <AppWidgetSummary
-            title="Debit Bank Balance"
-            total={statistics.debitBalance || 0}
-            color="error"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_debit.jpg" />}
-          />
-        </Grid>
-
-        <Grid xs={12} sm={6} md={3}>
-          <AppWidgetSummary
-            title="Total Users"
-            total={statistics.user || 0}
-            color="info"
-            icon={<img alt="icon" src="/assets/icons/glass/ic_users.png" />}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AppWebsiteVisits
-            title="Sector Values Over Time"
-            subheader="Daily sector value trends"
-            chart={chartData1}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppCurrentVisits
-            title={`Current Portflio Value: ${fCurrency(totalValue)}`}
-            chart={{ series: sectorData }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <Typography variant="h4" sx={{ mb: 5 }}>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </Typography>
-        </Grid>
-        <Grid xs={12} md={6} lg={8}>
-          <AppWebsiteVisits
-            title="Total Customer"
-            subheader="(+40%) than last year"
-            chart={{
-              labels: chartData.labels,
-              series: [
+          <Grid xs={12} md={6} lg={4}>
+            <AppTrafficBySite
+              title="Traffic by Site"
+              list={[
                 {
-                  name: 'Main Companies',
-                  type: 'column',
-                  fill: 'solid',
-                  data: chartData.mainSeries,
+                  name: 'FaceBook',
+                  value: 323234,
+                  icon: <Iconify icon="eva:facebook-fill" color="#1877F2" width={32} />,
                 },
                 {
-                  name: 'SME Companies',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: chartData.smeSeries,
+                  name: 'Google',
+                  value: 341212,
+                  icon: <Iconify icon="eva:google-fill" color="#DF3E30" width={32} />,
                 },
                 {
-                  name: 'Companies',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: chartData.companySeries,
-                },
-
-              ],
-            }}
-          />
-        </Grid>
-
-
-
-
-        <Grid xs={12} md={6} lg={8}>
-          <AppWebsiteVisits
-            title="Website Visits"
-            subheader="(+43%) than last year"
-            chart={{
-              labels: [
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ],
-              series: [
-                {
-                  name: 'Team A',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+                  name: 'Linkedin',
+                  value: 411213,
+                  icon: <Iconify icon="eva:linkedin-fill" color="#006097" width={32} />,
                 },
                 {
-                  name: 'Team B',
-                  type: 'area',
-                  fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  name: 'Twitter',
+                  value: 443232,
+                  icon: <Iconify icon="eva:twitter-fill" color="#1C9CEA" width={32} />,
                 },
-                {
-                  name: 'Team C',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
-              ],
-            }}
-          />
+              ]}
+            />
+          </Grid>
         </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppCurrentVisits
-            title="Current Visits"
-            chart={{
-              series: [
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AppConversionRates
-            title="Conversion Rates"
-            subheader="(+43%) than last year"
-            chart={{
-              series: [
-                { label: 'Italy', value: 400 },
-                { label: 'Japan', value: 430 },
-                { label: 'China', value: 448 },
-                { label: 'Canada', value: 470 },
-                { label: 'France', value: 540 },
-                { label: 'Germany', value: 580 },
-                { label: 'South Korea', value: 690 },
-                { label: 'Netherlands', value: 1100 },
-                { label: 'United States', value: 1200 },
-                { label: 'United Kingdom', value: 1380 },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppCurrentSubject
-            title="Current Subject"
-            chart={{
-              categories: ['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math'],
-              series: [
-                { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AppNewsUpdate
-            title="News Update"
-            list={[...Array(5)].map((_, index) => ({
-              id: faker.string.uuid(),
-              title: faker.person.jobTitle(),
-              description: faker.commerce.productDescription(),
-              image: `/assets/images/covers/cover_${index + 1}.jpg`,
-              postedAt: faker.date.recent(),
-            }))}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppOrderTimeline
-            title="Order Timeline"
-            list={[...Array(5)].map((_, index) => ({
-              id: faker.string.uuid(),
-              title: [
-                '1983, orders, $4220',
-                '12 Invoices have been paid',
-                'Order #37745 from September',
-                'New order placed #XF-2356',
-                'New order placed #XF-2346',
-              ][index],
-              type: `order${index + 1}`,
-              time: faker.date.past(),
-            }))}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AppTrafficBySite
-            title="Traffic by Site"
-            list={[
-              {
-                name: 'FaceBook',
-                value: 323234,
-                icon: <Iconify icon="eva:facebook-fill" color="#1877F2" width={32} />,
-              },
-              {
-                name: 'Google',
-                value: 341212,
-                icon: <Iconify icon="eva:google-fill" color="#DF3E30" width={32} />,
-              },
-              {
-                name: 'Linkedin',
-                value: 411213,
-                icon: <Iconify icon="eva:linkedin-fill" color="#006097" width={32} />,
-              },
-              {
-                name: 'Twitter',
-                value: 443232,
-                icon: <Iconify icon="eva:twitter-fill" color="#1C9CEA" width={32} />,
-              },
-            ]}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AppTasks
-            title="Tasks"
-            subheader={`You have ${taskss.length} pending tasks`}
-
-
-          />
-        </Grid>
-      </Grid>
+      )}
     </Container>
   );
 }

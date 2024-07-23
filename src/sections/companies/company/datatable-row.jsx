@@ -21,7 +21,7 @@ import EditCompanyDialog from './company-edit';
 export default function DataTableRow({ company, fetchCompanies }) {
 
   const [open, setOpen] = useState(null);
-  // const [companyToDelete, setCompanyToDelete] = useState(null);
+  const [companyToDelete, setCompanyToDelete] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -33,10 +33,10 @@ export default function DataTableRow({ company, fetchCompanies }) {
     setOpen(event.currentTarget);
   };
 
-  // const handleDeleteCompany = (_id) => {
-  //   setCompanyToDelete({ _id });
-  //   setOpenDeleteDialog(true);
-  // };
+  const handleDeleteCompany = (_id) => {
+    setCompanyToDelete({ _id });
+    setOpenDeleteDialog(true);
+  };
 
   const handleDetailsCompany = async (id) => {
     try {
@@ -64,7 +64,7 @@ export default function DataTableRow({ company, fetchCompanies }) {
 
   const handleConfirmDelete = async () => {
     try {
-      await CompanyService.deleteCompany();
+      await CompanyService.deleteCompany(companyToDelete._id);
       setOpenDeleteDialog(false);
       setOpen(null);
       fetchCompanies();
@@ -123,10 +123,10 @@ export default function DataTableRow({ company, fetchCompanies }) {
           <Iconify icon="fluent:edit-16-filled" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
-        {/* <MenuItem onClick={() => handleDeleteCompany(company._id)} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={() => handleDeleteCompany(company._id)} sx={{ color: 'error.main' }}>
           <Iconify icon="fluent:delete-16-filled" sx={{ mr: 2 }} />
           Delete
-        </MenuItem> */}
+        </MenuItem>
         
       </Popover>
 
