@@ -158,7 +158,7 @@ export default function AppView() {
     <Container maxWidth="xl">
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, {username} Welcome back 👋
+          Hi, {username}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
           <Tabs value={selectedTab} onChange={handleTabChange}>

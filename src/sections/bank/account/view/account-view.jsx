@@ -1,4 +1,4 @@
-import {useState, useEffect,  useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -23,7 +23,6 @@ import TableToolbar from 'src/components/table/table-toolbar';
 
 import NewAccount from '../account-new';
 import DataTableRow from '../datatable-row';
-import AccountFilters from '../account-filters';
 
 export default function AccountView() {
   const [page, setPage] = useState(0);
@@ -32,7 +31,6 @@ export default function AccountView() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [noData, setNoData] = useState(false);
-  const [openFilter, setOpenFilter] = useState(false);
 
   const [customer, setCustomer] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -42,7 +40,7 @@ export default function AccountView() {
   const fetchAccounts = useCallback(async () => {
     try {
       const filterParams = {
-        page: page + 1, // Increment page to match backend pagination if needed
+        page: page + 1,
         limit: rowsPerPage,
         sortBy: orderBy,
         sortOrder: order,
@@ -52,13 +50,16 @@ export default function AccountView() {
       };
   
       const response = await AccountsService.fetchCustomers(filterParams);
+  
       if (response.accounts.length === 0) {
         setNoData(true);
       } else {
         setNoData(false);
-        setCustomer(response.accounts);
-        setTotalCount(response.pagination.totalDocs);
       }
+
+      setCustomer(response.accounts);
+      setTotalCount(response.pagination.totalDocs);
+     
     } catch (error) {
       console.error('Error fetching accounts:', error);
       setNoData(true);
@@ -68,45 +69,46 @@ export default function AccountView() {
   useEffect(() => {
     fetchAccounts();
   }, [fetchAccounts]);
-
-  const createAccount = async (customerdata, initialBalance) => {
+  
+  const createAccount = async (customerData, initialBalance) => {
     try {
-      const customerData = {
-        user: customerdata,
+      const response = await AccountsService.createCustomer({
+        user: customerData,
         balance: initialBalance,
-      };
-      const response = await AccountsService.createCustomer(customerData);
+      });
       fetchAccounts();
       console.log('New customer created:', response);
     } catch (error) {
       console.error('Error creating customer:', error);
     }
   };
-
+  
   const handleFilter = (newFilters) => {
+    setFilterName('')
     setFilters(newFilters);
     setPage(0);
   };
-
+  
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(id);
   };
-
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
+  
+  const handleFilterByName = (value) => {
+    setFilterName(value);
     setPage(0);
   };
+  
 
   return (
     <Container>
@@ -120,16 +122,16 @@ export default function AccountView() {
         >
           New
         </Button>
-        <AccountFilters
-          openFilter={openFilter}
-          onOpenFilter={() => setOpenFilter(true)}
-          onCloseFilter={() => setOpenFilter(false)}
-          onFilter={handleFilter}
-        />
       </Stack>
 
       <Card>
-        {!noData && <TableToolbar filterName={filterName} onFilterName={handleFilterByName} />}
+        <TableToolbar
+          filterName={filterName}
+          onFilterName={handleFilterByName}
+          filters={filters}
+          onFilter={handleFilter}
+          filterFor="account"  
+        />
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
@@ -152,7 +154,7 @@ export default function AccountView() {
                 {customer.map((row, index) => (
                   <DataTableRow
                     key={row._id}
-                    name={row.name}
+                    name={row.user.name}
                     updatedAt={fDateTime(row.updatedAt)}
                     balance={row.balance ? fNumbers(row.balance) : fNumbers(0)}
                     balanceType={row.balance < 0 ? 'Debit' : 'Credit'}

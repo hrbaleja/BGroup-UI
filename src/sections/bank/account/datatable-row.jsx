@@ -66,7 +66,6 @@ export default function DataTableRow({
 
   const handleDetailsClick = useCallback(
     (AccoutId) => {
-      console.log('hello');
       handleCloseMenu();
       handleGetTransactions(AccoutId);
     },
@@ -144,10 +143,10 @@ export default function DataTableRow({
         </MenuItem>
       </Popover>
 
-      <Dialog open={openTransactionView} onClose={() => setOpenTransactionView(false)}>
+      <Dialog open={openTransactionView} onClose={() => setOpenTransactionView(false)} >
         <DialogTitle>{name}</DialogTitle>
         <DialogContent>
-          <TransactionList transactions={transactions} />
+          <TransactionList transactions={transactions.transactions} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenTransactionView(false)}>Close</Button>

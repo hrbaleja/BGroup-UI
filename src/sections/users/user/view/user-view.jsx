@@ -36,6 +36,7 @@ export default function UserView() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [users, setUsers] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [filters, setFilters] = useState({ isVerified: [], isActive: '' });
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -89,6 +90,12 @@ export default function UserView() {
   const isNotFound = !dataFiltered.length && !!filterName;
   const isNoData = !users.length;
 
+  const handleFilter = (newFilters) => {
+    setFilterName('')
+    setFilters(newFilters);
+    setPage(0);
+  };
+
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -105,10 +112,13 @@ export default function UserView() {
 
       <Card>
         {!isNoData && (
-          <TableToolbar
-            filterName={filterName}
-            onFilterName={handleFilterByName}
-          />
+         <TableToolbar
+         filterName={filterName}
+         onFilterName={handleFilterByName}
+         filters={filters}
+         onFilter={handleFilter}
+         filterFor="user"  
+       />
         )}
 
         <Scrollbar>
