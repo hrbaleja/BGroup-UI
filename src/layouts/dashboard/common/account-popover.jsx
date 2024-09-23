@@ -13,10 +13,13 @@ import IconButton from '@mui/material/IconButton';
 import { Logout } from 'src/function/auth';
 import { account } from 'src/_mock/account';
 
+import Iconify from 'src/components/iconify';
+
+
 const MENU_OPTIONS = [
   { label: 'Home', icon: 'eva:home-fill', path: '' },
-  { label: 'Profile', icon: 'eva:person-fill', path: 'profile' },
-  { label: 'My Credential', icon: 'eva:settings-2-fill', path: 'credential' },
+  { label: 'Profile', icon: 'line-md:account-alert-loop', path: 'profile' },
+  { label: 'My Credential', icon: 'line-md:person-search', path: 'credential' },
   // { label: 'Settings', icon: 'eva:settings-2-fill', path: 'profile' },
 ];
 
@@ -94,9 +97,12 @@ export default function AccountPopover() {
           </Typography>
         </Box>
         <Divider sx={{ borderStyle: 'dashed' }} />
-        {MENU_OPTIONS.map((option) => (
+          {MENU_OPTIONS.map((option) => (
           <MenuItem key={option.label} onClick={() => handlenavigate(option.path)} >
-            {option.label}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <Typography variant="body2">{option.label}</Typography>
+              <Iconify icon={option.icon} />
+            </Box>
           </MenuItem>
         ))}
 
@@ -105,9 +111,10 @@ export default function AccountPopover() {
           disableRipple
           disableTouchRipple
           onClick={handleLogout}
-          sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
+          sx={{ typography: 'body2', color: 'error.main', py: 1.5 , display: 'flex', justifyContent: 'space-between', width: '100%'}}
         >
           Logout
+          <Iconify icon="line-md:speed-loop"/>
         </MenuItem>
       </Popover>
     </>

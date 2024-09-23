@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
 
 import transactionService from 'src/services/company/transactionService';
 
@@ -14,19 +15,14 @@ import Iconify from 'src/components/iconify';
 
 import EditTransactionDialog from './transaction-edit';
 
-export default function DataTableRow({
-  company, name, lotSize, appliedDate, amount, grantedBy, is_alloted, is_own, id, fetchTransaction, companyid, userid, users, companies, granterid
-}) {
-
+export default function DataTableRow({ transaction, fetchTransaction, users, companies }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openInfoDialog, setOpenInfoDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
-
   const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
   const handleCloseMenu = () => setAnchorEl(null);
-
 
   const handleInfoClick = useCallback(() => {
     setOpenInfoDialog(true);
@@ -45,13 +41,13 @@ export default function DataTableRow({
 
   const handleConfirmDelete = useCallback(async () => {
     try {
-      await transactionService.deleteTransaction(id);
+      await transactionService.deleteTransaction(transaction._id);
       setOpenDeleteDialog(false);
       fetchTransaction();
     } catch (error) {
       console.error('Error deleting transaction:', error);
     }
-  }, [id, fetchTransaction]);
+  }, [transaction._id, fetchTransaction]);
 
   const handleSubmitEdit = useCallback(() => {
     setOpenEditDialog(false);
@@ -63,16 +59,16 @@ export default function DataTableRow({
       <TableRow hover tabIndex={-1}>
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" marginLeft={2}>
-            <Typography variant="subtitle2" noWrap>{company}</Typography>
+            <Typography variant="subtitle2" noWrap>{transaction.company.name ? transaction.company.name : ''}</Typography>
           </Stack>
         </TableCell>
-        <TableCell>{name}</TableCell>
-        <TableCell>{lotSize}</TableCell>
-        <TableCell>{fDate(appliedDate)}</TableCell>
-        <TableCell>{grantedBy}</TableCell>
-        <TableCell>{amount}</TableCell>
-        <TableCell>{is_own}</TableCell>
-        <TableCell>{is_alloted}</TableCell>
+        <TableCell>{transaction.user.name ? transaction.user.name : ''}</TableCell>
+        <TableCell>{transaction.lotSize ? transaction.lotSize : ''}</TableCell>
+        <TableCell> {fDate(transaction.appliedDate)}</TableCell>
+        <TableCell>{transaction.grantedBy.name || ''}</TableCell>
+        <TableCell align="right">{fCurrency(transaction.amount)}</TableCell>
+        <TableCell align="center">{transaction.is_own ? 'Yes' : 'No'}</TableCell>
+        <TableCell align="center">{transaction.is_alloted ? 'Yes' : 'No'}</TableCell>
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -107,15 +103,14 @@ export default function DataTableRow({
           Transaction Details
         </DialogTitle>
         <DialogContent>
-            <Typography variant="body1"><strong>Company:</strong> {company}</Typography>
-            <Typography variant="body1"><strong>Name:</strong> {name}</Typography>
-            <Typography variant="body1"><strong>Lot Size:</strong> {lotSize}</Typography>
-
-            <Typography variant="body1"><strong>Applied Date:</strong> {fDate(appliedDate)}</Typography>
-            <Typography variant="body1"><strong>Granted By:</strong> {grantedBy}</Typography>
-            <Typography variant="body1"><strong>Amount:</strong> {amount}</Typography>
-            <Typography variant="body1"><strong>Is Own:</strong> {is_own}</Typography>
-            <Typography variant="body1"><strong>Is Alloted:</strong> {is_alloted}</Typography>
+          <Typography variant="body1"><strong>Company:</strong> {transaction.company.name || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Name:</strong> {transaction.user.name || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Lot Size:</strong> {transaction.lotSize || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Applied Date:</strong> {transaction.appliedDate || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Granted By:</strong> {transaction.grantedBy.name || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Amount:</strong> {transaction.amount || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Is Own:</strong> {transaction.is_own ? 'Yes' : 'No'}</Typography>
+          <Typography variant="body1"><strong>Is Alloted:</strong> {transaction.is_alloted ? 'Yes' : 'No'}</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenInfoDialog(false)} variant='outlined'>Close</Button>
@@ -134,7 +129,7 @@ export default function DataTableRow({
       <EditTransactionDialog
         open={openEditDialog}
         onClose={() => setOpenEditDialog(false)}
-        transaction={{ userid, companyid, granterid, lotSize, appliedDate, amount, is_alloted, is_own, id }}
+        transaction={transaction}
         onSubmit={handleSubmitEdit}
         users={users}
         companies={companies}
@@ -144,19 +139,36 @@ export default function DataTableRow({
 }
 
 DataTableRow.propTypes = {
-  company: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  lotSize: PropTypes.number.isRequired,
-  appliedDate: PropTypes.string.isRequired,
-  is_alloted: PropTypes.string.isRequired,
-  is_own: PropTypes.string.isRequired,
-  grantedBy: PropTypes.string.isRequired,
-  amount: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  transaction: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    company: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.string,
+      }),
+    ]),
+    lotSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    appliedDate: PropTypes.string,
+    user: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.string,
+      }),
+    ]),
+    grantedBy: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.string,
+      }),
+    ]),
+    amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    is_own: PropTypes.bool,
+    is_alloted: PropTypes.bool,
+  }).isRequired,
   fetchTransaction: PropTypes.func.isRequired,
-  companyid: PropTypes.string.isRequired,
-  userid: PropTypes.string.isRequired,
   users: PropTypes.array.isRequired,
   companies: PropTypes.array.isRequired,
-  granterid: PropTypes.string.isRequired,
 };

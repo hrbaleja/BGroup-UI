@@ -1,80 +1,59 @@
-import SvgColor from 'src/components/svg-color';
+import { PATHS } from 'src/routes/routes';
 
+import SvgColor from 'src/components/svg-color';
 // ----------------------------------------------------------------------
 
 const icon = (name) => (
   <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
 );
 
-const navConfig = [
+export const navConfig = [
   {
     title: 'dashboard',
-    path: '/',
+    path: PATHS.INDEX,
     icon: icon('ic_analytics'),
   },
-
   {
     title: 'user',
-    path: '/user',
+    path: PATHS.USER,
     icon: icon('ic_user'),
   },
-  // {
-  //   title: 'Infomation',
-  //   path: '/information',
-  //   icon: icon('ic_info'),
-  // },
   {
     title: 'Account',
-    path: '/account',
+    path: PATHS.ACCOUNT,
     icon: icon('ic_money'),
   },
   {
     title: 'Companies',
-    path: '/companies',
+    path: PATHS.COMPANIES,
     icon: icon('ic_analytics'),
   },
   {
     title: 'Transaction',
-    path: '/transaction',
+    path: PATHS.TRANSACTION,
     icon: icon('ic_lock'),
   },
-
   {
     title: 'Income',
-    path: '/income',
+    path: PATHS.INCOME,
     icon: icon('ic_money'),
-  },
 
+  },
   {
     title: 'Other Income',
-    path: '/others/income',
+    path: PATHS.OTHER_INCOME,
     icon: icon('ic_money'),
   },
   {
     title: 'product',
-    path: '/products',
+    path: PATHS.PRODUCTS,
     icon: icon('ic_cart'),
   },
   {
     title: 'blog',
-    path: '/blog',
+    path: PATHS.BLOG,
     icon: icon('ic_blog'),
   },
-
- 
-  
-  // login and Not found pages
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: icon('ic_lock'),
-  // },
-
-  // {
-  //   title: 'Not found',
-  //   path: '/404',
-  //   icon: icon('ic_disabled'),
-  // },
 ];
 
 export default navConfig;

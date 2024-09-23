@@ -9,7 +9,6 @@ export default function EditCompany({ open, onClose, company, onSubmit, formatDa
   const [editCompany, setEditCompany] = useState(company);
   const [errors, setErrors] = useState({});
 
-
   useEffect(() => {
     setEditCompany(company);
   }, [company]);

@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-  Card,
-  Stack,
-  Table,
-  Button,
-  Container,
-  TableBody,
-  Typography,
-  TableContainer,
-  TablePagination,
-} from '@mui/material';
+import { Card, Stack, Table, Button, Container, TableBody, Typography, TableContainer, TablePagination, } from '@mui/material';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import incomeService from 'src/services/others/IncomeService';
 
 import Iconify from 'src/components/iconify';
@@ -100,7 +91,7 @@ export default function IncomeView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Income Statement</Typography>
+        <Typography variant="h4">{PAGE_TITLES.OTHER_INCOME}</Typography>
         <Button
           variant="outlined"
           color="inherit"
@@ -112,7 +103,7 @@ export default function IncomeView() {
       </Stack>
 
       <Card>
-        <TableToolbar filterName={filterName} onFilterName={handleFilterByName} />
+        <TableToolbar filterName={filterName} onFilterName={handleFilterByName} filterFor={PAGE_TITLES.OTHER_INCOME} />
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>

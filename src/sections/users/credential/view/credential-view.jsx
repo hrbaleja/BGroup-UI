@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import InformationService from 'src/services/users/credentialService';
 
 import Iconify from 'src/components/iconify';
@@ -93,7 +94,7 @@ export default function CredentialView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Credentials Information</Typography>
+        <Typography variant="h4">{PAGE_TITLES.CREDENTIALS}</Typography>
         <Button
           variant="outlined"
           color="inherit"
@@ -109,6 +110,7 @@ export default function CredentialView() {
           <TableToolbar
             filterName={filterName}
             onFilterName={handleFilterByName}
+            filterFor={PAGE_TITLES.CREDENTIALS}
           />)}
 
         <Scrollbar>

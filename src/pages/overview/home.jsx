@@ -2,18 +2,20 @@ import { Helmet } from 'react-helmet-async';
 
 import { PAGE_TITLES } from 'src/constants/page';
 
-import { TransactionView } from 'src/sections/companies/transaction/view';
+import { HomeView } from 'src/sections/Home/view';
 
 
 // ----------------------------------------------------------------------
 
-export default function TransactionPage() {
+export default function HomePage() {
+
   return (
     <>
       <Helmet>
-        <title>{PAGE_TITLES.TRANSACTIONS}  </title>
+        <title>{PAGE_TITLES.HOME}</title>
       </Helmet>
-      <TransactionView />
+
+      <HomeView/>
     </>
   );
 }

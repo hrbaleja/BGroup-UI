@@ -1,8 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 
+import { PAGE_TITLES } from 'src/constants/page';
+
 import { CompanyView } from 'src/sections/companies/company/view';
 
-// import {CompanyView}   from 'src/sections/company/view';
 
 
 // ----------------------------------------------------------------------
@@ -11,9 +12,8 @@ export default function CompanyPage() {
   return (
     <>
       <Helmet>
-        <title>Companies |  </title>
+        <title>{PAGE_TITLES.COMPANY}</title>
       </Helmet>
-      {/* <CompanyView/> */}
       <CompanyView/>
     </>
   );

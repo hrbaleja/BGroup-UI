@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, Dialog, Popover, TableRow, MenuItem, TableCell, Typography, IconButton, DialogTitle, DialogContent, DialogActions, } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
-import { fNumbers, fCurrency, } from 'src/utils/format-number';
+import {  fCurrency, } from 'src/utils/format-number';
 
 import incomeService from 'src/services/others/IncomeService';
 
@@ -61,7 +61,7 @@ export default function DataTableRow({ income, fetchIncomes }) {
     <>
       <TableRow hover tabIndex={-1}>
         <TableCell>{income.name}</TableCell>
-        <TableCell>{fNumbers(income.amount)}</TableCell>
+        <TableCell>{fCurrency(income.amount)}</TableCell>
         <TableCell>{income.method}</TableCell>
         <TableCell>{income.description}</TableCell>
         <TableCell>{income.category}</TableCell>

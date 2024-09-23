@@ -10,8 +10,9 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import CircularProgress from '@mui/material/CircularProgress'; // Add import for CircularProgress
+import CircularProgress from '@mui/material/CircularProgress';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import CompanyService from 'src/services/company/companyService';
 
 import Iconify from 'src/components/iconify';
@@ -37,6 +38,7 @@ export default function CompanyView() {
   const [companies, setCompanies] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [isArchived, setIsArchived] = useState(false);
+  // const [filters, setFilters] = useState({ balanceType: '', amount: 0 });
 
   const fetchCompanies = useCallback(async () => {
     setIsLoading(true);
@@ -90,9 +92,9 @@ export default function CompanyView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Company Information</Typography>
+        <Typography variant="h4">{PAGE_TITLES.COMPANY}</Typography>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Typography>Show Archived:</Typography>
+          <Typography>Show Past:</Typography>
           <Switch checked={isArchived} onChange={(e) => setIsArchived(e.target.checked)} />
           <Button
             variant="outlined"
@@ -100,7 +102,6 @@ export default function CompanyView() {
             startIcon={<Iconify icon="eva:plus-fill" />}
             onClick={() => setOpenCreateDialog(true)}
           >
-            {' '}
             New
           </Button>
         </Stack>
@@ -112,7 +113,11 @@ export default function CompanyView() {
           </Stack>
         )}
         {!isLoading && !noData && (
-          <TableToolbar filterName={filterName} onFilterName={handleFilterByName} />
+          <TableToolbar
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            filterFor={PAGE_TITLES.COMPANY}
+          />
         )}
         {!isLoading && (
           <Scrollbar>
@@ -170,6 +175,7 @@ export default function CompanyView() {
           />
         )}
       </Card>
+      
       <NewCompany
         open={openCreateDialog}
         onClose={() => setOpenCreateDialog(false)}

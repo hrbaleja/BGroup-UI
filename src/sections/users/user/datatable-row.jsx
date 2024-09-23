@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
-import {  Stack,Button,
-  Avatar,Dialog,  Select,Popover,  TableRow,MenuItem,TextField,  TableCell, Typography,
-  IconButton,  InputLabel, FormControl,
-  DialogTitle, DialogContent, DialogActions
+import {
+  Stack, Button, Avatar, Dialog, Select, Popover, TableRow, MenuItem, TextField, TableCell, Typography,
+  IconButton, InputLabel, FormControl, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 
 import userRoles from 'src/constants/userRoles';
@@ -13,10 +12,10 @@ import UserService from 'src/services/users/userService';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
-export default function DataTableRow({ name, avatarUrl, email, role, isVerified, isActive, id, fetchUsers }) {
+export default function DataTableRow({ name, avatarUrl, email, role, isVerified, isActive, id, fetchUsers, hasDematAccount }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [editUser, setEditUser] = useState({ name, email, role });
+  const [editUser, setEditUser] = useState({ name, email, role, hasDematAccount });
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
   const [newPassword, setNewPassword] = useState('');
 
@@ -134,6 +133,18 @@ export default function DataTableRow({ name, avatarUrl, email, role, isVerified,
               ))}
             </Select>
           </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="has-demat-account-label">Has Demat Account</InputLabel>
+            <Select
+              labelId="has-demat-account-label"
+              value={editUser.hasDematAccount ? 'yes' : 'no'}
+              onChange={(e) => setEditUser({ ...editUser, hasDematAccount: e.target.value === 'yes' })}
+              label="Has Demat Account"
+            >
+              <MenuItem value="yes">Yes</MenuItem>
+              <MenuItem value="no">No</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
@@ -143,7 +154,7 @@ export default function DataTableRow({ name, avatarUrl, email, role, isVerified,
 
       <Dialog open={openPasswordDialog} onClose={() => setOpenPasswordDialog(false)}>
         <DialogTitle sx={{ borderBottom: '1px solid ', margin: ' 1rem', color: 'info.main' }}>
-         Change Password of {name}
+          Change Password of {name}
         </DialogTitle>
         <DialogContent>
           <TextField
@@ -173,4 +184,5 @@ DataTableRow.propTypes = {
   isActive: PropTypes.bool,
   id: PropTypes.string,
   fetchUsers: PropTypes.func,
+  hasDematAccount: PropTypes.bool,  
 };

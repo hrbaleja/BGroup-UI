@@ -3,8 +3,11 @@ import React, { useState } from 'react';
 
 import { Paper, Table, TableRow, TableBody, TableCell, TableHead, Typography, TableContainer, TablePagination, } from '@mui/material';
 
-export default function TransactionList({ 
-  transactions 
+import { fDateTime } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
+
+export default function TransactionList({
+  transactions
 }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -46,11 +49,11 @@ export default function TransactionList({
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((transaction) => (
                 <TableRow key={transaction.txnId}>
-                  <TableCell>{new Date(transaction.txnDate).toLocaleString()}</TableCell>
+                  <TableCell>{fDateTime(transaction.txnDate)}</TableCell>
                   <TableCell>{transaction.description}</TableCell>
-                  <TableCell>{transaction.debit}</TableCell>
-                  <TableCell>{transaction.credit}</TableCell>
-                  <TableCell>{transaction.balance}</TableCell>
+                  <TableCell>{fCurrency(transaction.debit)}</TableCell>
+                  <TableCell>{fCurrency(transaction.credit)}</TableCell>
+                  <TableCell>{fCurrency(transaction.balance)}</TableCell>
                 </TableRow>
               ))}
           </TableBody>

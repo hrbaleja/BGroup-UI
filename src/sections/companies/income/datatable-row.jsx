@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions,  } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
-import { fNumbers } from 'src/utils/format-number';
+import { fCurrency } from 'src/utils/format-number';
 
 import incomeService from 'src/services/company/incomeService';
 
@@ -72,9 +72,9 @@ export default function DataTableRow({
     <>
       <TableRow hover tabIndex={-1}>
         <TableCell>{income.application}</TableCell>
-        <TableCell>{`${fNumbers(income.profit)}`}</TableCell>
-        <TableCell>{fNumbers(income.sharedProfit)}</TableCell>
-        <TableCell>{fNumbers(income.finalAmount)}</TableCell>
+        <TableCell>{`${fCurrency(income.profit)}`}</TableCell>
+        <TableCell>{fCurrency(income.sharedProfit)}</TableCell>
+        <TableCell>{fCurrency(income.finalAmount)}</TableCell>
         <TableCell>{`${fDate(income.createdAt)}`}</TableCell>
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>

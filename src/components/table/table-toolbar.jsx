@@ -6,11 +6,15 @@ import Toolbar from '@mui/material/Toolbar';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { PAGE_TITLES } from 'src/constants/page';
+
 import Iconify from 'src/components/iconify';
 
-import AccountFilters from './account-filters';
+import TableFilters from './table-filters';
 
-export default function TableToolbar({ filterName, onFilterName, filters, onFilter,filterFor }) {
+
+
+export default function TableToolbar({ filterName, onFilterName, filters, onFilter, filterFor }) {
   const [openFilter, setOpenFilter] = useState(false);
   const [searchTerm, setSearchTerm] = useState(filterName);
 
@@ -25,48 +29,53 @@ export default function TableToolbar({ filterName, onFilterName, filters, onFilt
   };
 
   const handleOpenFilter = () => {
-    setSearchTerm('');  // Clear the search term when filter is opened
+    setSearchTerm('');
     setOpenFilter(true);
   };
 
-  return (
- 
-      <Toolbar
-        sx={{
-          height: 96,
-          display: 'flex',
-          justifyContent: 'space-between',
-          p: (theme) => theme.spacing(0, 1, 0, 3),
-        }}
-      >
-        <OutlinedInput
-          value={searchTerm}
-          onChange={handleSearchChange}
-          onKeyPress={handleSearchKeyPress}
-          placeholder="Search ..."
-          startAdornment={
-            <InputAdornment position="start">
-              <Iconify
-                icon="eva:search-fill"
-                sx={{ color: 'text.disabled', width: 20, height: 20 }}
-              />
-            </InputAdornment>
-          }
-        />
+  const hasCredential = filterFor !== PAGE_TITLES.CREDENTIALS;
 
-        <Tooltip>
+
+  return (
+
+    <Toolbar
+      sx={{
+        height: 96,
+        display: 'flex',
+        justifyContent: 'space-between',
+        p: (theme) => theme.spacing(0, 1, 0, 3),
+      }}
+    >
+      <OutlinedInput
+        value={searchTerm}
+        onChange={handleSearchChange}
+        onKeyDown ={handleSearchKeyPress}
+        placeholder="Search ..."
+        startAdornment={
+          <InputAdornment position="start">
+            <Iconify
+              icon="eva:search-fill"
+              sx={{ color: 'text.disabled', width: 20, height: 20 }}
+            />
+          </InputAdornment>
+        }
+      />
+
+      {hasCredential && (
+        <Tooltip title="Filter">
           <div>
-            <AccountFilters
+            <TableFilters
               openFilter={openFilter}
               onOpenFilter={handleOpenFilter}
               onCloseFilter={() => setOpenFilter(false)}
               onFilter={onFilter}
               filters={filters}
-              filterFor={filterFor}  
+              filterFor={filterFor}
             />
           </div>
         </Tooltip>
-      </Toolbar>
+      )}
+    </Toolbar>
   );
 }
 
@@ -75,5 +84,5 @@ TableToolbar.propTypes = {
   onFilterName: PropTypes.func,
   filters: PropTypes.object,
   onFilter: PropTypes.func,
-  filterFor:PropTypes.string,
+  filterFor: PropTypes.string,
 };

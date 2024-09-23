@@ -1,5 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
+import { PAGE_TITLES } from 'src/constants/page';
+
 import { UserView } from 'src/sections/users/user/view';
 
 // ----------------------------------------------------------------------
@@ -8,7 +10,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | </title>
+        <title>{PAGE_TITLES.USERS}</title>
       </Helmet>
       <UserView />
     </>

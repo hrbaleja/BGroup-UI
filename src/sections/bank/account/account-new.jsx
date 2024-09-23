@@ -12,25 +12,21 @@ import {
   DialogActions,
 } from '@mui/material';
 
-import AccountsService from 'src/services/bank/accountsService';
-
-export default function NewAccount({ open, onClose, handleCreateCustomer }) {
+export default function NewAccount({ open, onClose, handleCreateCustomer,fetchNonCustomers  }) {
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [initialBalance, setInitialBalance] = useState(0);
-  const [formError, setFormError] = useState(false); // State for form validation error
+  const [formError, setFormError] = useState(false); 
 
   useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await AccountsService.fetchNonCustomer();
-        setCustomers(response);
-      } catch (error) {
-        console.error('Error fetching customers:', error);
-      }
-    };
-    fetchCustomers();
-  }, []);
+    if (open) {
+      const getNonCustomers = async () => {
+        const nonCustomers = await fetchNonCustomers();
+        setCustomers(nonCustomers);
+      };
+      getNonCustomers();
+    }
+  }, [open, fetchNonCustomers]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,7 +34,6 @@ export default function NewAccount({ open, onClose, handleCreateCustomer }) {
       setFormError(true);
       return;
     }
-
     handleCreateCustomer(selectedCustomer._id, initialBalance);
     onClose();
   };
@@ -102,4 +97,5 @@ NewAccount.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   handleCreateCustomer: PropTypes.func.isRequired,
+  fetchNonCustomers: PropTypes.func.isRequired,
 };

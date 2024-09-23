@@ -11,8 +11,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { fDateTime } from 'src/utils/format-time';
-import { fNumbers } from 'src/utils/format-number';
+import { fNumbers,fCurrency,  } from 'src/utils/format-number';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import AccountsService from 'src/services/bank/accountsService';
 
 import Iconify from 'src/components/iconify';
@@ -35,7 +36,7 @@ export default function AccountView() {
   const [customer, setCustomer] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const [filters, setFilters] = useState({ balanceTypes: [], amount: '' });
+  const [filters, setFilters] = useState({ balanceType: '', amount: 0 });
 
   const fetchAccounts = useCallback(async () => {
     try {
@@ -45,12 +46,12 @@ export default function AccountView() {
         sortBy: orderBy,
         sortOrder: order,
         name: filterName,
-        balanceType: filters.balanceTypes.join(','),
+        balanceType: filters.balanceType,
         amountRange: filters.amount,
       };
-  
+
       const response = await AccountsService.fetchCustomers(filterParams);
-  
+
       if (response.accounts.length === 0) {
         setNoData(true);
       } else {
@@ -59,17 +60,27 @@ export default function AccountView() {
 
       setCustomer(response.accounts);
       setTotalCount(response.pagination.totalDocs);
-     
     } catch (error) {
       console.error('Error fetching accounts:', error);
       setNoData(true);
     }
   }, [page, rowsPerPage, order, orderBy, filterName, filters]);
-  
+
+
   useEffect(() => {
     fetchAccounts();
   }, [fetchAccounts]);
-  
+
+  const fetchNonCustomers = async () => {
+    try {
+      const response = await AccountsService.fetchNonCustomer();
+      return response;
+    } catch (error) {
+      console.error('Error fetching non-customers:', error);
+      return [];
+    }
+  };
+
   const createAccount = async (customerData, initialBalance) => {
     try {
       const response = await AccountsService.createCustomer({
@@ -82,46 +93,47 @@ export default function AccountView() {
       console.error('Error creating customer:', error);
     }
   };
-  
+
   const handleFilter = (newFilters) => {
     setFilterName('')
     setFilters(newFilters);
     setPage(0);
   };
-  
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(id);
   };
-  
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  
+
   const handleFilterByName = (value) => {
     setFilterName(value);
     setPage(0);
   };
-  
 
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Account Holder</Typography>
+        <Typography variant="h4">{PAGE_TITLES.ACCOUNT}</Typography>
         <Button
           variant="outlined"
           color="inherit"
           startIcon={<Iconify icon="eva:plus-fill" />}
           onClick={() => setOpenCreateDialog(true)}
+          aria-label="Create new account"
         >
           New
         </Button>
+
       </Stack>
 
       <Card>
@@ -129,8 +141,8 @@ export default function AccountView() {
           filterName={filterName}
           onFilterName={handleFilterByName}
           filters={filters}
-          onFilter={handleFilter}
-          filterFor="account"  
+          onFilter={(newFilters) => handleFilter(newFilters)}
+          filterFor={PAGE_TITLES.ACCOUNT}
         />
 
         <Scrollbar>
@@ -143,9 +155,9 @@ export default function AccountView() {
                   onRequestSort={handleSort}
                   headLabel={[
                     { id: 'name', label: 'Name' },
-                    { id: 'updatedAt', label: 'Last Update' },
+                    { id: 'updatedAt', label: 'Last Update'},
                     { id: 'balance', label: 'Balance' },
-                    { id: 'balanceType', label: 'Balance Type' },
+                    { id: 'balanceType', label: 'Balance Type',align:'center' },
                     { id: '' },
                   ]}
                 />
@@ -156,7 +168,7 @@ export default function AccountView() {
                     key={row._id}
                     name={row.user.name}
                     updatedAt={fDateTime(row.updatedAt)}
-                    balance={row.balance ? fNumbers(row.balance) : fNumbers(0)}
+                    balance={row.balance ? fCurrency(row.balance) :fNumbers(0) }
                     balanceType={row.balance < 0 ? 'Debit' : 'Credit'}
                     id={row._id}
                     avatarUrl={`/assets/images/avatars/avatar_${index + 1}.jpg`}
@@ -186,6 +198,8 @@ export default function AccountView() {
         open={openCreateDialog}
         onClose={() => setOpenCreateDialog(false)}
         handleCreateCustomer={createAccount}
+        fetchNonCustomers={fetchNonCustomers}  
+
       />
     </Container>
   );

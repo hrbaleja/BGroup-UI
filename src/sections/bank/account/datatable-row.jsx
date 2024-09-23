@@ -114,8 +114,8 @@ export default function DataTableRow({
           </Stack>
         </TableCell>
         <TableCell>{updatedAt}</TableCell>
-        <TableCell>{balance}</TableCell>
-        <TableCell>
+        <TableCell align="right" sx={{paddingRight:'5%'}} >{balance}</TableCell>
+        <TableCell  align="center">
           <Label color={balanceType === 'Debit' ? 'error' : 'success'}>{balanceType}</Label>
         </TableCell>
         <TableCell align="right">
@@ -146,7 +146,7 @@ export default function DataTableRow({
       <Dialog open={openTransactionView} onClose={() => setOpenTransactionView(false)} >
         <DialogTitle>{name}</DialogTitle>
         <DialogContent>
-          <TransactionList transactions={transactions.transactions} />
+          <TransactionList transactions={transactions} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenTransactionView(false)}>Close</Button>

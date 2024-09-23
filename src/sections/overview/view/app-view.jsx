@@ -230,6 +230,8 @@ export default function AppView() {
               total={statistics.amount}
               color="success"
               icon={<img alt="icon" src="/assets/icons/glass/ic_galss_money.jpg" />}
+              to="/transaction"
+
             />
           </Grid>
           <Grid xs={12} sm={6} md={3}>
@@ -238,6 +240,8 @@ export default function AppView() {
               total={statistics.mainCompany}
               color="warning"
               icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+              to="/companies"
+
             />
           </Grid>
           <Grid xs={12} sm={6} md={3}>
@@ -246,14 +250,18 @@ export default function AppView() {
               total={statistics.smeCompany}
               color="error"
               icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+              to="/companies"
+
             />
           </Grid>
           <Grid xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Total Users"
-              total={statistics.user || 0}
+              total={statistics.dematuser || 0}
               color="info"
               icon={<img alt="icon" src="/assets/icons/glass/ic_users.png" />}
+              to="/account"
+
             />
           </Grid>
 

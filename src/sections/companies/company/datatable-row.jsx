@@ -10,6 +10,9 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, } from '@mui/material';
 
+import { fDate } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
+
 import CompanyService from 'src/services/company/companyService';
 
 import Iconify from 'src/components/iconify';
@@ -97,9 +100,9 @@ export default function DataTableRow({ company, fetchCompanies }) {
           </Stack>
         </TableCell>
         <TableCell >{company.industry}</TableCell>
-        <TableCell>{new Date(company.startDate).toLocaleDateString()}</TableCell>
-        <TableCell>{new Date(company.endDate).toLocaleDateString()}</TableCell>
-        <TableCell>{company.amount}</TableCell>
+        <TableCell> {fDate(company.startDate)}</TableCell>
+        <TableCell>{fDate(company.endDate)}</TableCell>
+        <TableCell>{fCurrency(company.amount)}</TableCell>
         <TableCell>{company.lotSize}</TableCell>
         <TableCell>{company.isMain ? 'Main' : 'SME'}</TableCell>
         <TableCell align="right">

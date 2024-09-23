@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import incomeService from 'src/services/company/incomeService';
 import transactionService from 'src/services/company/transactionService';
 
@@ -107,7 +108,7 @@ export default function IncomeView() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Income Statement</Typography>
+        <Typography variant="h4">{PAGE_TITLES.INCOME}</Typography>
         <Button
           variant="outlined"
           color="inherit"
@@ -122,6 +123,7 @@ export default function IncomeView() {
           <TableToolbar
             filterName={filterName}
             onFilterName={handleFilterByName}
+            filterFor={PAGE_TITLES.INCOME}
           />)}
 
         <Scrollbar>

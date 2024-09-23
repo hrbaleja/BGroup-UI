@@ -2,18 +2,18 @@ import { Helmet } from 'react-helmet-async';
 
 import { PAGE_TITLES } from 'src/constants/page';
 
-import { TransactionView } from 'src/sections/companies/transaction/view';
-
+import AppErrorLogs from 'src/sections/setting/errorlog-view';
 
 // ----------------------------------------------------------------------
 
-export default function TransactionPage() {
+export default function AppPage() {
+
   return (
     <>
       <Helmet>
-        <title>{PAGE_TITLES.TRANSACTIONS}  </title>
+        <title>{PAGE_TITLES.ERRORLOG}</title>
       </Helmet>
-      <TransactionView />
+      <AppErrorLogs/>
     </>
   );
 }

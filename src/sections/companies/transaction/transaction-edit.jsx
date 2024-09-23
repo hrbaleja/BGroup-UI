@@ -12,19 +12,9 @@ export default function EditTransaction({ open, onClose, transaction, onSubmit, 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    const fetchTransaction = async () => {
-      try {
-        const response = await TransactionService.getTransactionById(transaction.id);
-        setEditTransaction(response);
-      } catch (error) {
-        console.error('Error fetching transaction data:', error);
-      }
-    };
-
-    if (transaction.id) {
-      fetchTransaction();
-    }
+    setEditTransaction(transaction || {});
   }, [transaction]);
+
 
   const validateForm = () => {
     const newErrors = {};
@@ -75,27 +65,13 @@ export default function EditTransaction({ open, onClose, transaction, onSubmit, 
     }
   };
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setEditTransaction({
-  //     ...editTransaction,
-  //       [name]: value,
-  //   });
-  //   if (errors[name]) {
-  //     setErrors({
-  //       ...errors,
-  //       [name]: '',
-  //     });
-  //   }
-  // };
-
   const formatDateForTextField = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
     const formattedDate = date.toISOString().split('T')[0];
     return formattedDate;
   };
-  
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle sx={{ borderBottom: '1px solid ', margin: ' 1rem', color: 'info.main' }}>
@@ -105,7 +81,7 @@ export default function EditTransaction({ open, onClose, transaction, onSubmit, 
         <FormControl fullWidth sx={{ margin: '0.5rem 0' }} error={!!errors.user}>
           <InputLabel>Select User</InputLabel>
           <Select
-            value={editTransaction.user || ''}
+            value={editTransaction.user?._id || ''}
             onChange={handleInputChange}
             fullWidth
             name="user"
@@ -123,7 +99,7 @@ export default function EditTransaction({ open, onClose, transaction, onSubmit, 
         <FormControl fullWidth sx={{ margin: '0.5rem 0' }} error={!!errors.company}>
           <InputLabel>Select Company</InputLabel>
           <Select
-            value={editTransaction.company}
+            value={editTransaction.company?._id}
             onChange={handleInputChange}
             fullWidth
             name="company"
@@ -168,7 +144,7 @@ export default function EditTransaction({ open, onClose, transaction, onSubmit, 
         <FormControl fullWidth sx={{ margin: '0.5rem 0' }} error={!!errors.grantedBy}>
           <InputLabel>Granted By</InputLabel>
           <Select
-            value={editTransaction.grantedBy}
+            value={editTransaction.grantedBy?._id}
             onChange={handleInputChange}
             fullWidth
             name="grantedBy"
@@ -249,7 +225,35 @@ export default function EditTransaction({ open, onClose, transaction, onSubmit, 
 EditTransaction.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  transaction: PropTypes.object.isRequired,
+  transaction: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    company: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.string,
+      }),
+    ]),
+    lotSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    appliedDate: PropTypes.string,
+    user: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.string,
+      }),
+    ]),
+    grantedBy: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.string,
+      }),
+    ]),
+    amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    is_own: PropTypes.bool,
+    is_alloted: PropTypes.bool,
+  }).isRequired,
   onSubmit: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,
   companies: PropTypes.array.isRequired,

@@ -9,6 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Logout, SetCookies } from 'src/function/auth';
 import authService from 'src/services/auth/authService';
 
+import { PATHS } from './routes';
+
 const ProtectedRoute = ({ children }) => {
    const location = useLocation();
    const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +22,6 @@ const ProtectedRoute = ({ children }) => {
 
          const accessToken = Cookies.get('accessToken');
          const refreshToken = Cookies.get('refreshToken');
-         // await new Promise(resolve => setTimeout(resolve, 500));
 
          if (accessToken && refreshToken) {
             setIsAuthenticated(true);
@@ -56,7 +57,7 @@ const ProtectedRoute = ({ children }) => {
 
    if (!isAuthenticated) {
       return <Navigate
-         to={`/login?redirect=${encodeURIComponent(location.pathname)}`}
+         to={`/${PATHS.LOGIN}?redirect=${encodeURIComponent(location.pathname)}`}
          replace
       />;
    }

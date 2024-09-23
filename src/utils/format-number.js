@@ -9,9 +9,9 @@ export function fNumbers(number) {
   return numeral(number).format('0.00');
 }
 export function fCurrency(number) {
-  const format = number ? numeral(number).format('$0,0.00') : '';
+  const format = number ? numeral(number).format('0,0.00') : '';
 
-  return result(format, '.00');
+  return result(format, '00000.00');
 }
 
 export function fPercent(number) {

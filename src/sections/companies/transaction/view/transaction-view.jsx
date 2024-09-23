@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -6,10 +6,9 @@ import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Select from '@mui/material/Select';
-import TableRow from '@mui/material/TableRow';
+// import TableRow from '@mui/material/TableRow';
 import MenuItem from '@mui/material/MenuItem';
-import TableHead from '@mui/material/TableHead';
-import TableCell from '@mui/material/TableCell';
+// import TableHead from '@mui/material/TableHead';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
@@ -21,8 +20,9 @@ import DialogActions from '@mui/material/DialogActions';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { fNumbers } from 'src/utils/format-number';
+// import { fNumbers } from 'src/utils/format-number';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import userService from 'src/services/users/userService';
 import companyService from 'src/services/company/companyService';
 import transactionService from 'src/services/company/transactionService';
@@ -46,7 +46,7 @@ export default function TransactionView() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [noData, setNoData] = useState(false);
 
-  const [customer, setCustomer] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -54,65 +54,62 @@ export default function TransactionView() {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [openCompanyModal, setOpenCompanyModal] = useState(false);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [usersResponse, companiesResponse] = await Promise.all([
+        userService.fetchUsers(),
+        companyService.getCompanies(),
+      ]);
 
+      setUsers(usersResponse);
+      setCompanies(companiesResponse);
 
-  useEffect(() => {
-    fetchTransactions();
-    fetchUsers();
-    fetchCompanies();
+      const transactionsSummary = await transactionService.getTransactions();
+      setTransactions(transactionsSummary);
+      setNoData(transactionsSummary.length === 0);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setNoData(true);
+    }
   }, []);
 
-  const fetchTransactions = async () => {
-    try {
-      const response = await transactionService.getTransactions();
-      if (response.length === 0) {
-        setNoData(true);
-      }
-      setCustomer(response);
-    } catch (error) {
-      console.error('Error fetching customer data:', error);
-    }
-  };
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const fetchUsers = async () => {
+  const fetchTransactionDetails = useCallback(async (transactionId) => {
     try {
-      const response = await userService.fetchUsers();
-      setUsers(response);
+      const details = await transactionService.getTransactionDetails(transactionId);
+      setTransactions((prevTransactions) =>
+        prevTransactions.map((transaction) =>
+          transaction.id === transactionId ? { ...transaction, ...details } : transaction
+        )
+      );
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Error fetching transaction details:', error);
     }
-  };
-
-  const fetchCompanies = async () => {
-    try {
-      const response = await companyService.getCompanies();
-      setCompanies(response);
-    } catch (error) {
-      console.error('Error fetching companies:', error);
-    }
-  };
+  }, []);
 
   const createTransaction = async (newTransaction) => {
     try {
       await transactionService.createTransaction(newTransaction);
-      setOpenCreateDialog(false)
-      fetchTransactions();
+      setOpenCreateDialog(false);
+      fetchData();
     } catch (error) {
       console.error('Error creating transaction:', error);
     }
   };
 
-  const handleSort = (event, id) => {
-    const isAsc = orderBy === id && order === 'asc';
-    if (id !== '') {
+  const handleSort = useCallback(
+    (event, id) => {
+      const isAsc = orderBy === id && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(id);
-    }
-  };
+    },
+    [order, orderBy]
+  );
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  const handleChangePage = (event, newPage) => setPage(newPage);
 
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
@@ -125,64 +122,84 @@ export default function TransactionView() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: customer,
+    inputData: transactions,
     comparator: getComparator(order, orderBy),
     filterName,
   });
 
   const notFound = !dataFiltered.length && !!filterName;
 
+  // const handleCompanySelect = useCallback(
+  //   (companyId) => {
+  //     const selectedCompanys = companies.find((company) => company._id === companyId);
+  //     setSelectedCompany(selectedCompany);
 
-  const handleOpenCompanyModal = () => {
-    setOpenCompanyModal(true);
-    setSelectedCompany(null);
-  };
-  const handleCompanySelect = (company) => {
-    setSelectedCompany(company);
+  //     const filteredUsers = users.map((user) => ({
+  //       ...user,
+  //       isApplied: transactions.some(
+  //         (transaction) =>
+  //           transaction.user._id === user._id && transaction.company._id === selectedCompanys._id
+  //       ),
+  //     }));
 
-    // Filter users based on the selected company
-    const filteredUsers = users.map((user) => {
-      const hasApplied = customer.some(
-        (transaction) =>
-          transaction.user._id === user._id &&
-          transaction.company._id === company._id
-      );
+  //     setUsers(filteredUsers);
+  //   },
+  //   [transactions, users, companies]
+  // );
 
-      return {
-        ...user,
-        isApplied: hasApplied,
-      };
-    });
+  const handleCompanySelect = useCallback(
+    (companyId) => {
+      setSelectedCompany((prevSelectedCompany) => {
+        const selectedCompan = companies.find((company) => company._id === companyId);
 
-    setUsers(filteredUsers);
-  };
+        const filteredUsers = users.map((user) => ({
+          ...user,
+          isApplied: transactions.some(
+            (transaction) =>
+              transaction.user._id === user._id && transaction.company._id === selectedCompan._id
+          ),
+        }));
+
+        setUsers(filteredUsers);
+
+        return selectedCompan; 
+      });
+    },
+    [transactions, users, companies]
+  );
+
 
   return (
     <Container>
       <Stack direction="row" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Transactions</Typography>
-        <Stack direction="row" spacing={2} >
+        <Typography variant="h4">{PAGE_TITLES.TRANSACTIONS}</Typography>
+        <Stack direction="row" spacing={2}>
           <Button
             variant="text"
             color="info"
             startIcon={<Iconify icon="grommet-icons:status-good" />}
-            onClick={handleOpenCompanyModal}
-          >Status</Button>
+            onClick={() => setOpenCompanyModal(true)}
+          >
+            Status
+          </Button>
           <Button
             variant="outlined"
             color="inherit"
             startIcon={<Iconify icon="eva:plus-fill" />}
             onClick={() => setOpenCreateDialog(true)}
-          >New</Button>
+          >
+            New
+          </Button>
         </Stack>
       </Stack>
       <Card>
-
         {!noData && (
           <TableToolbar
             filterName={filterName}
             onFilterName={handleFilterByName}
-          />)}
+            filterFor={PAGE_TITLES.TRANSACTIONS}
+          />
+        )}
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
@@ -203,7 +220,8 @@ export default function TransactionView() {
                     { id: 'is_alloted', label: 'Is Alloted', type: 'boolean', flex: 1 },
                     { id: '', label: 'Action' },
                   ]}
-                />)}
+                />
+              )}
 
               <TableBody>
                 {dataFiltered
@@ -211,42 +229,34 @@ export default function TransactionView() {
                   .map((row) => (
                     <DataTableRow
                       key={row._id}
-                      company={row.company?.name}
-                      name={row.user.name}
-                      lotSize={row.lotSize}
-                      appliedDate={row.appliedDate}
-                      grantedBy={row.grantedBy.name}
-                      amount={fNumbers(row.amount)}
-                      is_own={row.is_own ? 'Yes' : 'No'}
-                      is_alloted={row.is_alloted ? 'Yes' : 'No'}
-                      id={row._id}
-                      companyid={row.company._id}
-                      userid={row.user._id}
-                      granterid={row.grantedBy._id}
+                      transaction={row}
+                      fetchTransactionDetails={() => fetchTransactionDetails(row._id)}
                       users={users}
                       companies={companies}
-                      fetchTransaction={fetchTransactions}
+                      fetchTransaction={fetchData}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, customer.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, transactions.length)}
                 />
                 {(notFound || noData) && <TableNoData query={filterName} />}
               </TableBody>
             </Table>
           </TableContainer>
         </Scrollbar>
-        {!noData && (<TablePagination
-          page={page}
-          component="div"
-          count={customer.length}
-          rowsPerPage={rowsPerPage}
-          onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />)}
+        {!noData && (
+          <TablePagination
+            page={page}
+            component="div"
+            count={transactions.length}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handleChangePage}
+            rowsPerPageOptions={[5, 10, 25]}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
       </Card>
 
       <NewTransaction
@@ -257,20 +267,16 @@ export default function TransactionView() {
         onSubmit={createTransaction}
       />
 
-      <Dialog open={openCompanyModal} onClose={handleOpenCompanyModal} sx={{ minwidth: '1000px', maxheight: '800px', minHeight: '400px' }}>
-        <DialogTitle sx={{ borderBottom: '1px solid ', margin: ' 1rem', color: 'info.main' }}>
-          Check  Application
-        </DialogTitle>
+      <Dialog fullWidth maxWidth="xs" open={openCompanyModal} onClose={() => setOpenCompanyModal(false)}>
+        <DialogTitle>Select a Company</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth sx={{ margin: '0.5rem 0' }}>
-            <InputLabel>Select Company</InputLabel>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Company</InputLabel>
             <Select
-              value={selectedCompany ? selectedCompany._id : ''}
-              label="Select Company"
-              onChange={(e) =>
-                handleCompanySelect(companies.find((company) => company._id === e.target.value))
-              }
-              fullWidth
+              labelId="demo-simple-select-label"
+              label="Company"
+              value={selectedCompany?._id || ''}
+              onChange={(e) => handleCompanySelect(e.target.value)}
             >
               {companies.map((company) => (
                 <MenuItem key={company._id} value={company._id}>
@@ -279,31 +285,13 @@ export default function TransactionView() {
               ))}
             </Select>
           </FormControl>
-
-          {selectedCompany && (
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Status</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {users.map((user) => (
-                    <TableRow key={user._id}>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell>{user.isApplied ? 'Applied' : 'Not Applied'}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenCompanyModal(false)}>Cancel</Button>
+          <Button variant="outlined" onClick={() => setOpenCompanyModal(false)}>
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
-    </Container>);
+    </Container>
+  );
 }
