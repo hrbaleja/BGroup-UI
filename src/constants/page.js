@@ -7,7 +7,7 @@ export const PAGE_TITLES = {
     OTHER_INCOME: "Other Income Information",
     CREDENTIALS: "Credentials Information",
     PROFILE: "My Profile",
-    INDEX : "Minimal UI Kit",
+    INDEX : "B Group Ltd.",
     ERROR: "404 Page Not Found",
     ERRORLOG: "Recent Error Logs",
     HOME: 'HomePage'
