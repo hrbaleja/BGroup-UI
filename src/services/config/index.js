@@ -1,8 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-
-
 const api = axios.create({
 
   baseurl: 'https://api-bgroup.vercel.app/api/v1/',
