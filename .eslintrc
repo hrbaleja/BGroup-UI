@@ -165,7 +165,7 @@
             "custom-components": "src/components/**",
             "custom-sections": "src/sections/**",
             "custom-types": "src/types/**",
-             "custom-validation": "src/validation/**"
+            "custom-validation": "src/validation/**"
           }
         },
         "internal-pattern": [

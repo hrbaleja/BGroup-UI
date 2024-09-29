@@ -1,23 +1,38 @@
-// src/routes.ts
-
 export const PATHS = {
-    LOGIN: 'login',
-    REGISTER: 'register',
-    FORGOT_PASSWORD: 'forgotpassword',
-    INDEX: '/',
-    USER: 'user',
-    PRODUCTS: 'products',
-    BLOG: 'blog',
-    ACCOUNT: 'account',
-    CREDENTIAL: 'credential',
-    TRANSACTION: 'transaction',
-    COMPANIES: 'companies',
-    PROFILE: 'profile',
-    INCOME: 'income',
-    OTHER_INCOME: 'others/income',
-    PAGE_404: '404',
-    ANY: '*',
-    ERRORLOG: 'setting/errorlog',
-    Home:'dashboard'
-  };
-  
+
+  // Authentication Routes
+  LOGIN: 'auth/login',
+  REGISTER: '/auth/register',
+  FORGOT_PASSWORD: '/auth/forgotpassword',
+
+  // Home Routes
+  INDEX: '/',
+  Home: '/dashboard',
+
+  // User and Profile Routes
+  USER: '/user',
+  PROFILE: '/profile',
+  CREDENTIAL: '/credential',
+
+  // Company and Financial Routes
+  COMPANIES: '/companies',
+  TRANSACTION: '/transaction',
+  INCOME: '/income',
+  OTHER_INCOME: '/others/income',
+
+  // Account Routes     
+  ACCOUNT: '/account',
+
+  // Settings Routes
+  ERRORLOG: '/setting/errorlog',
+  CONFIGURATION: '/setting/configuration',
+
+  // General Routes
+  PAGE_404: '404',
+  ANY: '*',
+
+  // Additional Content Routes
+  PRODUCTS: '/products',
+  BLOG: '/blog',
+
+};

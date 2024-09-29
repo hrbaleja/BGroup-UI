@@ -10,6 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
+import { PATHS } from 'src/routes/routes';
+
 import { Logout } from 'src/function/auth';
 import { account } from 'src/_mock/account';
 
@@ -44,7 +46,7 @@ export default function AccountPopover() {
   const handleLogout = useCallback(() => {
     Logout()
 
-    navigate('/login');
+    navigate(PATHS.LOGIN);
   }, [navigate]);
 
   return (

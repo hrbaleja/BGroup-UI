@@ -8,16 +8,37 @@ export function fNumber(number) {
 export function fNumbers(number) {
   return numeral(number).format('0.00');
 }
-export function fCurrency(number) {
+export function fCurrencyold(number) {
   const format = number ? numeral(number).format('0,0.00') : '';
 
   return result(format, '00000.00');
 }
 
-export function fPercent(number) {
-  const format = number ? numeral(Number(number) / 100).format('0.0%') : '';
+export function fCurrency(number) {
+  if (number === null || number === undefined) {
+    return '';
+  }
 
-  return result(format, '.0');
+  const formatted = formatIndianCurrency(number);
+  return formatted;
+}
+
+function formatIndianCurrency(number) {
+  // Convert to string and split into whole and decimal parts
+  const [whole, decimal] = number.toString().split('.');
+  
+  // Ensure decimal part has two digits
+  const formattedDecimal = decimal ? decimal.padEnd(2, '0').slice(0, 2) : '00';
+
+  // Format whole number part
+  const lastThreeDigits = whole.slice(-3);
+  const otherDigits = whole.slice(0, -3).replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+
+  // Use template literals for formatting
+  const formattedWhole = otherDigits ? `${otherDigits},${lastThreeDigits}` : lastThreeDigits;
+
+  // Combine whole and decimal parts
+  return `${formattedWhole}.${formattedDecimal}`;
 }
 
 export function fShortenNumber(number) {

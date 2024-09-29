@@ -16,7 +16,7 @@ export const navConfig = [
   {
     title: 'user',
     path: PATHS.USER,
-    icon: icon('ic_user'),
+    icon:  icon('ic_newuser'),
   },
   {
     title: 'Account',
@@ -31,7 +31,7 @@ export const navConfig = [
   {
     title: 'Transaction',
     path: PATHS.TRANSACTION,
-    icon: icon('ic_lock'),
+    icon: icon('ic_tr'),
   },
   {
     title: 'Income',

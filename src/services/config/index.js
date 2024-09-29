@@ -1,9 +1,11 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+
+
 const api = axios.create({
 
-  baseurl: 'https://api-bgroup.vercel.app/api/v1',
+  baseURL: 'http://10.0.1.218:5005/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -12,6 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = Cookies.get('accessToken');
+    // const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

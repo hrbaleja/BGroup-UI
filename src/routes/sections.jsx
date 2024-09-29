@@ -7,30 +7,39 @@ import DashboardLayout from 'src/layouts/dashboard';
 import { PATHS } from './routes'; 
 import ProtectedRoute from './ProtectedRoute';
 
-export const LoginPage = lazy(() => import('src/pages/auth/login'));
-export const RegisterPage = lazy(() => import('src/pages/auth/register'));
-export const ForgotPasswordPage = lazy(() => import('src/pages/auth/forgotpassword'));
+// Authentication Pages
+export const LoginPage = lazy(() => import('src/pages/auth/loginPage'));
+export const RegisterPage = lazy(() => import('src/pages/auth/registerPage'));
+export const ForgotPasswordPage = lazy(() => import('src/pages/auth/forgotpasswordPage'));
 
-export const AccountPage = lazy(() => import('src/pages/bank/account'));
+// Home Pages
+export const IndexPage = lazy(() => import('src/pages/home/appPage'));
+export const HomePage = lazy(() => import('src/pages/home/homePage'));
 
-export const IndexPage = lazy(() => import('src/pages/overview/app'));
-export const Page404 = lazy(() => import('src/pages/overview/page-not-found'));
-export const HomePage = lazy(() => import('src/pages/overview/home'));
+// User and Profile Pages
+export const UserPage = lazy(() => import('src/pages/users/userPage'));
+export const ProfilePage = lazy(() => import('src/pages/users/profilePage'));
+export const CredentialPage = lazy(() => import('src/pages/users/credentialPage'));
 
-export const UserPage = lazy(() => import('src/pages/users/user'));
-export const CredentialPage = lazy(() => import('src/pages/users/credential'));
-export const ProfilePage = lazy(() => import('src/pages/users/profile'));
+// Company and Financial Pages
+export const CompanyPage = lazy(() => import('src/pages/company/companyPage'));
+export const TransactionPage = lazy(() => import('src/pages/company/transactionPage'));
+export const IncomePage = lazy(() => import('src/pages/company/incomePage'));
+export const OtherIncomePage = lazy(() => import('src/pages/others/incomePage'));
 
-export const CompanyPage = lazy(() => import('src/pages/company/company'));
-export const TransactionPage = lazy(() => import('src/pages/company/transaction'));
-export const IncomePage = lazy(() => import('src/pages/company/income'));
+// Account Pages
+export const AccountPage = lazy(() => import('src/pages/account/accountPage'));
 
+// Settings Pages
+export const ErrorLogsPage = lazy(() => import('src/pages/setting/errorlogPage'));
+export const ConfigurationPage = lazy(() => import('src/pages/setting/configurationPage'));
+
+// General Pages
+export const Page404 = lazy(() => import('src/pages/home/notfoundPage'));
+
+// Additional Content Pages
 export const BlogPage = lazy(() => import('src/pages/blog'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
-
-export const OtherIncome = lazy(() => import('src/pages/others/income'));
-
-export const ErrorLogs = lazy(() => import('src/pages/setting/errorlog'));
 
 export default function Router() {
   const accessToken = Cookies.get('accessToken');
@@ -131,7 +140,7 @@ export default function Router() {
           path: PATHS.OTHER_INCOME,
           element: (
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <OtherIncome />
+              <OtherIncomePage />
             </ProtectedRoute>
           ),
         },
@@ -139,7 +148,15 @@ export default function Router() {
           path: PATHS.ERRORLOG,
           element: (
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <ErrorLogs />
+              <ErrorLogsPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: PATHS.CONFIGURATION,
+          element: (
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ConfigurationPage />
             </ProtectedRoute>
           ),
         },
