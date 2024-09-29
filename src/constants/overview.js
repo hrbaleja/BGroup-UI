@@ -1,2 +1,2 @@
-export const COMPANY_NAME = " Minimal UI Kit";
+export const COMPANY_NAME = " Homessy Dry Fruits";
 
