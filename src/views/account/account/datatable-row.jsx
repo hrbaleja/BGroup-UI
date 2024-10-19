@@ -163,7 +163,7 @@ export default function DataTableRow({
           <Iconify icon="eva:plus-fill" sx={{ mr: 2 }} />
           Transaction
         </MenuItem>
-        <CopyToClipboard text={`http://10.0.1.218:3030/customer/${id}`} onCopy={() => console.log("Link copied!")}>
+        <CopyToClipboard text={`https://bgroupltd.vercel.app/account/${id}`} onCopy={() => console.log("Link copied!")}>
           <MenuItem onClick={handleShareLink}>
             <Iconify icon="eva:share-fill" sx={{ mr: 2 }} />
             Share Link
