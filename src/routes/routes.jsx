@@ -36,5 +36,5 @@ export const PATHS = {
   PRODUCTS: '/products',
   BLOG: '/blog',
 
-  CUSTOMER: '/customer/:id',
+  CUSTOMER: '/account/:id',
 };

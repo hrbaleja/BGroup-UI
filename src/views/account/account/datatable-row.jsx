@@ -115,7 +115,7 @@ export default function DataTableRow({
   }, [transactionData, id, handleCloseDialog, fetchCustomer]);
 
   const handleShareLink = useCallback(() => {
-    const link = `http://10.0.1.218:3030/customer/${id}`;
+    const link = `https://bgroupltd.vercel.app/account/${id}`;
     setSnackbar({
       open: true,
       message: 'Link copied to clipboard!'
