@@ -3,13 +3,18 @@ import api from '../config';
 const TaskService = {
   baseUrl: '/tasks',
 
+  createTask: async (taskData) => {
+    const response = await api.post(TaskService.baseUrl, taskData);
+    return response.data;
+  },
+
   getTasks: async () => {
     const response = await api.get(TaskService.baseUrl);
     return response.data;
   },
 
-  createTask: async (taskData) => {
-    const response = await api.post(TaskService.baseUrl, taskData);
+  getTasksByStatus: async (status) => {
+    const response = await api.get(`${TaskService.baseUrl}/${status}`);
     return response.data;
   },
 
@@ -23,10 +28,6 @@ const TaskService = {
     return response.data;
   },
 
-  getTasksByStatus: async (status) => {
-    const response = await api.get(`${TaskService.baseUrl}/${status}`);
-    return response.data;
-  },
 };
 
 export default TaskService;

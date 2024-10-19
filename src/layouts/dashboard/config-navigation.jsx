@@ -9,14 +9,14 @@ const icon = (name) => (
 
 export const navConfig = [
   {
-    title: 'dashboard',
+    title: 'Home',
     path: PATHS.INDEX,
-    icon: icon('ic_analytics'),
+    icon: icon('ic_home'),
   },
   {
     title: 'user',
     path: PATHS.USER,
-    icon:  icon('ic_newuser'),
+    icon:  icon('ic_group'),
   },
   {
     title: 'Account',
@@ -31,29 +31,28 @@ export const navConfig = [
   {
     title: 'Transaction',
     path: PATHS.TRANSACTION,
-    icon: icon('ic_tr'),
+    icon: icon('ic_transaction'),
   },
   {
     title: 'Income',
     path: PATHS.INCOME,
-    icon: icon('ic_money'),
-
+    icon: icon('ic_tr'),
   },
   {
     title: 'Other Income',
     path: PATHS.OTHER_INCOME,
-    icon: icon('ic_money'),
+    icon: icon('ic_tr'),
   },
-  {
-    title: 'product',
-    path: PATHS.PRODUCTS,
-    icon: icon('ic_cart'),
-  },
-  {
-    title: 'blog',
-    path: PATHS.BLOG,
-    icon: icon('ic_blog'),
-  },
+  // {
+  //   title: 'product',
+  //   path: PATHS.PRODUCTS,
+  //   icon: icon('ic_cart'),
+  // },
+  // {
+  //   title: 'blog',
+  //   path: PATHS.BLOG,
+  //   icon: icon('ic_blog'),
+  // },
 ];
 
 export default navConfig;

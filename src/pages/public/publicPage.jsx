@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { PAGE_TITLES } from 'src/constants/page';
-import { AccountView } from 'src/views/account/account/view';
+import { PublicAccountView } from 'src/views/public/account';
 
 // ----------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ export default function AccountPage() {
         <title>{PAGE_TITLES.ACCOUNT}</title>
       </Helmet>
 
-      <AccountView />
+      < PublicAccountView/>
     </>
   );
 }

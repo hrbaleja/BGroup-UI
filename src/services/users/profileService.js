@@ -22,6 +22,7 @@ const ProfileService = {
     const response = await api.delete(`${ProfileService.baseUrl}/${id}`);
     return response.data;
   },
+  
 };
 
 export default ProfileService;

@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { PAGE_TITLES } from 'src/constants/page';
-import AppErrorLogs from 'src/views/setting/error/errorlog-view';
+import { AppErrorView } from 'src/views/setting/error';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ export default function AppPage() {
         <title>{PAGE_TITLES.ERRORLOG}</title>
       </Helmet>
       
-      <AppErrorLogs/>
+      <AppErrorView/>
     </>
   );
 }

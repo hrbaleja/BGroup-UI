@@ -1,9 +1,12 @@
-// sectorService.js
-
 import api from '../config';
 
 const SectorService = {
   baseUrl: '/sectors',
+
+  createSector: async (sectorData) => {
+    const response = await api.post(SectorService.baseUrl, sectorData);
+    return response.data;
+  },
 
   getAllSectors: async () => {
     const response = await api.get(SectorService.baseUrl);
@@ -13,10 +16,6 @@ const SectorService = {
   getLatestSectorValues: async()=>{
     const response = await api.get(`${SectorService.baseUrl}/latest`);
     return response.data
-  },
-  createSector: async (sectorData) => {
-    const response = await api.post(SectorService.baseUrl, sectorData);
-    return response.data;
   },
 
   getSectorById: async (sectorId) => {
@@ -33,6 +32,7 @@ const SectorService = {
     const response = await api.delete(`${SectorService.baseUrl}/${sectorId}`);
     return response.data;
   },
+
 };
 
 export default SectorService;

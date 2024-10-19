@@ -33,4 +33,7 @@ export default defineConfig({
   preview: {
     port: 3030,
   },
+  optimizeDeps: {
+    include: ['react-apexcharts', 'apexcharts'],
+  },
 });

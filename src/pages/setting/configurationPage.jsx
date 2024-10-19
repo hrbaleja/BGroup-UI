@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { PAGE_TITLES } from 'src/constants/page';
-import ConfigurationView from 'src/views/setting/configuration/configuration-view';
+import { ConfigurationView } from 'src/views/setting/configuration';
 
 // ----------------------------------------------------------------------
 

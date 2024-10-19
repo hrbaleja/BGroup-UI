@@ -1,2 +1,2 @@
-export const COMPANY_NAME = " Homessy Dry Fruits";
+export const COMPANY_NAME = "B Group Pvt. Ltd.";
 

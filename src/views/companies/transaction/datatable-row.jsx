@@ -62,10 +62,10 @@ export default function DataTableRow({ transaction, fetchTransaction, users, com
             <Typography variant="subtitle2" noWrap>{transaction.company.name ? transaction.company.name : ''}</Typography>
           </Stack>
         </TableCell>
-        <TableCell>{transaction.user.name ? transaction.user.name : ''}</TableCell>
+        <TableCell>{transaction.user?.name || ''}</TableCell>
         <TableCell>{transaction.lotSize ? transaction.lotSize : ''}</TableCell>
         <TableCell> {fDate(transaction.appliedDate)}</TableCell>
-        <TableCell>{transaction.grantedBy.name || ''}</TableCell>
+        <TableCell>{transaction.grantedBy?.name || ''}</TableCell>
         <TableCell align="right">{fCurrency(transaction.amount)}</TableCell>
         <TableCell align="center">{transaction.is_own ? 'Yes' : 'No'}</TableCell>
         <TableCell align="center">{transaction.is_alloted ? 'Yes' : 'No'}</TableCell>
@@ -103,11 +103,11 @@ export default function DataTableRow({ transaction, fetchTransaction, users, com
           Transaction Details
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1"><strong>Company:</strong> {transaction.company.name || 'N/A'}</Typography>
-          <Typography variant="body1"><strong>Name:</strong> {transaction.user.name || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Company:</strong> {transaction.company?.name || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Name:</strong> {transaction.user?.name || 'N/A'}</Typography>
           <Typography variant="body1"><strong>Lot Size:</strong> {transaction.lotSize || 'N/A'}</Typography>
           <Typography variant="body1"><strong>Applied Date:</strong> {transaction.appliedDate || 'N/A'}</Typography>
-          <Typography variant="body1"><strong>Granted By:</strong> {transaction.grantedBy.name || 'N/A'}</Typography>
+          <Typography variant="body1"><strong>Granted By:</strong> {transaction.grantedBy?.name || 'N/A'}</Typography>
           <Typography variant="body1"><strong>Amount:</strong> {transaction.amount || 'N/A'}</Typography>
           <Typography variant="body1"><strong>Is Own:</strong> {transaction.is_own ? 'Yes' : 'No'}</Typography>
           <Typography variant="body1"><strong>Is Alloted:</strong> {transaction.is_alloted ? 'Yes' : 'No'}</Typography>

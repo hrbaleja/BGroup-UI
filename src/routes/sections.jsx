@@ -29,6 +29,7 @@ export const OtherIncomePage = lazy(() => import('src/pages/others/incomePage'))
 
 // Account Pages
 export const AccountPage = lazy(() => import('src/pages/account/accountPage'));
+export const AccountPageNew = lazy(() => import('src/pages/account/accountPageNew'));
 
 // Settings Pages
 export const ErrorLogsPage = lazy(() => import('src/pages/setting/errorlogPage'));
@@ -36,6 +37,9 @@ export const ConfigurationPage = lazy(() => import('src/pages/setting/configurat
 
 // General Pages
 export const Page404 = lazy(() => import('src/pages/home/notfoundPage'));
+
+//
+export const PublicPage = lazy(() => import('src/pages/public/publicPage'));
 
 // Additional Content Pages
 export const BlogPage = lazy(() => import('src/pages/blog'));
@@ -160,6 +164,14 @@ export default function Router() {
             </ProtectedRoute>
           ),
         },
+        {
+          path: PATHS.ACCOUNTNEW,
+          element: (
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <AccountPageNew />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
     {
@@ -180,11 +192,15 @@ export default function Router() {
     },
     {
       path: PATHS.ANY,
-      element: isAuthenticated ? <Navigate to={PATHS.PAGE_404} replace /> : <LoginPage />,
+      element: isAuthenticated ? <Navigate to={PATHS.PAGE_404} replace /> : <HomePage />,
     },
     {
       path: PATHS.Home,
       element:<HomePage/>
+    },
+    {
+      path: PATHS.CUSTOMER,
+      element:<PublicPage/>
     },
   ]);
 

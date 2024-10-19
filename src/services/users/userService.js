@@ -5,9 +5,7 @@ const UserService = {
 
 
     fetchUsers: async (isDematUsers = true) => {
-        // const queryParams = new URLSearchParams(params).toString();
         const response = await api.get(`${UserService.baseUrl}?isDematUsers=${isDematUsers ? 'yes' : 'no'}`);
-        // const response = await api.get(UserService.baseUrl);
         return response.data;
     },
 
@@ -25,6 +23,7 @@ const UserService = {
         const response = await api.put(`${UserService.baseUrl}/password/${userId}`, updatedPassword);
         return response.data;
     },
+    
 };
 
 export default UserService;

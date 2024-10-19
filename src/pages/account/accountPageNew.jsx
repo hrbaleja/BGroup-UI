@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { PAGE_TITLES } from 'src/constants/page';
-import { AccountView } from 'src/views/account/account/view';
+import { AccountView } from 'src/views/account/accountnew/view';
 
 // ----------------------------------------------------------------------
 

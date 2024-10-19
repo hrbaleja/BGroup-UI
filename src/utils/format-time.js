@@ -4,7 +4,6 @@ import { format, getTime, formatDistanceToNow } from 'date-fns';
 
 export function fDate(date, newFormat) {
   const fm = newFormat || 'dd MMMM yyyy';
-
   return date ? format(new Date(date), fm) : '';
 }
 
@@ -24,4 +23,8 @@ export function fToNow(date) {
       addSuffix: true,
     })
     : '';
+}
+
+export function fDateDDMMYYYY(date) {
+  return date ? format(new Date(date), 'dd-MM-yyyy') : '';
 }

@@ -27,6 +27,7 @@ const IncomeService = {
     const response = await api.delete(`${IncomeService.baseUrl}/${incomeId}`);
     return response.data;
   },
+  
 };
 
 export default IncomeService;

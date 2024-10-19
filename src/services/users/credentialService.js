@@ -22,6 +22,7 @@ const InformationService = {
     const response = await api.delete(`${InformationService.baseUrl}/${entryId}`);
     return response.data;
   },
+  
 };
 
 export default InformationService;

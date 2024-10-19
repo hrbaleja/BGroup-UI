@@ -12,7 +12,8 @@ const authService = {
   refreshtoken: async (refreshToken) => {
     const response = await api.post('/auth/refreshtoken', { refreshToken })
     return response.data
-  }
+  },
+  
 };
 
 export default authService;

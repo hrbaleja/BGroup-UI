@@ -25,12 +25,19 @@ export function fCurrency(number) {
 
 function formatIndianCurrency(number) {
   // Convert to string and split into whole and decimal parts
-  const [whole, decimal] = number.toString().split('.');
-  
+  const isNegative = number < 0; // Check if the number is negative
+  const absoluteNumber = Math.abs(number); // Get the absolute value of the number
+  const [whole, decimal] = absoluteNumber.toString().split('.');
+
   // Ensure decimal part has two digits
   const formattedDecimal = decimal ? decimal.padEnd(2, '0').slice(0, 2) : '00';
 
-  // Format whole number part
+  // Check if the whole part is less than 1000
+  if (parseInt(whole, 10) < 1000) {
+    return `${isNegative ? '-' : ''}${whole}.${formattedDecimal}`; // Return with sign for negative numbers
+  }
+
+  // Format whole number part with Indian style
   const lastThreeDigits = whole.slice(-3);
   const otherDigits = whole.slice(0, -3).replace(/\B(?=(\d{2})+(?!\d))/g, ',');
 
@@ -38,7 +45,7 @@ function formatIndianCurrency(number) {
   const formattedWhole = otherDigits ? `${otherDigits},${lastThreeDigits}` : lastThreeDigits;
 
   // Combine whole and decimal parts
-  return `${formattedWhole}.${formattedDecimal}`;
+  return `${isNegative ? '-' : ''}${formattedWhole}.${formattedDecimal}`; // Add sign for negative numbers
 }
 
 export function fShortenNumber(number) {

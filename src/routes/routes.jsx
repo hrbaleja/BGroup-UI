@@ -22,6 +22,7 @@ export const PATHS = {
 
   // Account Routes     
   ACCOUNT: '/account',
+  ACCOUNTNEW: '/new-account',
 
   // Settings Routes
   ERRORLOG: '/setting/errorlog',
@@ -35,4 +36,5 @@ export const PATHS = {
   PRODUCTS: '/products',
   BLOG: '/blog',
 
+  CUSTOMER: '/customer/:id',
 };

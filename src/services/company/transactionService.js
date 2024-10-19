@@ -37,6 +37,7 @@ const TransactionService = {
     const response = await api.delete(`${TransactionService.baseUrl}/${id}`);
     return response.data;
   },
+  
 };
 
 export default TransactionService;

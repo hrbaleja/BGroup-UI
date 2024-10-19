@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -48,7 +48,7 @@ const FILTER_CONFIG = {
       options: [
         { value: 1, label: 'SME' },
         { value: 0, label: 'Main Board' },
-        
+
       ],
       type: 'radio',
     },
@@ -102,19 +102,20 @@ const FILTER_CONFIG = {
     },
   },
   [PAGE_TITLES.TRANSACTIONS]: {
-    role: {
-      label: 'Role',
-      options: ['Admin', 'Manager', 'Employee', 'Guest'],
-      type: 'checkbox',
-    },
     isAlloted: {
       label: 'Is Alloted',
-      options: ['Yes', 'No'],
+      options: [
+        { value: true, label: 'Yes' },
+        { value: false, label: 'No' }
+      ],
       type: 'radio',
     },
     isOwn: {
       label: 'Is Own',
-      options: ['Yes', 'No'],
+      options: [
+        { value: true, label: 'Yes' },
+        { value: false, label: 'No' }
+      ],
       type: 'radio',
     },
   },
@@ -130,10 +131,9 @@ const FILTER_CONFIG = {
     },
   },
 };
-
 export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCloseFilter, onFilter }) {
   const [filters, setFilters] = useState({});
-  
+
   useEffect(() => {
     setFilters(initializeFilters(filterFor));
   }, [filterFor]);
@@ -146,7 +146,7 @@ export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCl
     });
     return initialState;
   };
-  
+
   const handleFilterChange = (filterKey, value) => {
     setFilters(prevFilters => ({
       ...prevFilters,
@@ -172,7 +172,7 @@ export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCl
 
   const renderFilter = (filterKey, filterConfig) => {
     const { label, options, type } = filterConfig;
-  
+
     switch (type) {
       case 'checkbox':
         return (
