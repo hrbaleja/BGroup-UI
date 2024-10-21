@@ -40,7 +40,7 @@ const AuthView = ({ children, title, linkText, linkUrl }) => {
             </Helmet>
             <Box>
                 <Stack alignItems="center" justifyContent="center">
-                    <Card sx={{ p: 5, width: 1, maxWidth: 420, minWidth: 420, }}>
+                    <Card sx={{ p: 5, width: 1, maxWidth: 420, minWidth: 380, }}>
                         <Typography variant="h4" textAlign="center">
                             {title === FORGOTPWD ? COMPANY_NAME : `${title} to ${COMPANY_NAME}`}
                         </Typography>
