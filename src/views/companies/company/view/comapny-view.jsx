@@ -47,6 +47,7 @@ export default function CompanyView() {
       if (response.length === 0) {
         setNoData(true);
       }
+      setNoData(false);
       setCompanies(response);
     } catch (error) {
       console.error('Error fetching companies:', error);
