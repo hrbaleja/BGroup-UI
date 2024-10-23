@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Box from '@mui/material/Box';
-import Popover from '@mui/material/Popover';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+import { Box, Popover, MenuItem, IconButton, Typography, } from '@mui/material';
 
 import { PATHS } from 'src/routes/routes';
 
@@ -60,7 +56,7 @@ export default function LanguagePopover() {
           </Box>
         </MenuItem>
         <MenuItem onClick={() => handlenavigate(PATHS.CONFIGURATION)} >
-        {/* <MenuItem  onClick={() =>  setOpen(null)}> */}
+          {/* <MenuItem  onClick={() =>  setOpen(null)}> */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <Typography variant="body2">SMS Service</Typography>
             <Iconify width={24} icon="line-md:cloud-upload-loop" />

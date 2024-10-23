@@ -151,7 +151,7 @@ export default function IncomeView() {
                       key={row._id}
                       income={{
                         _id: row._id,
-                        application: row.transactionId,
+                        application: row.name,
                         profit: row.profit,
                         sharedProfit: row.sharedProfit,
                         finalAmount: row.finalAmount,

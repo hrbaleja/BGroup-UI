@@ -1,12 +1,6 @@
 import { useState } from 'react';
 
-import Slide from '@mui/material/Slide';
-import Input from '@mui/material/Input';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { Slide, Input, Button, styled, IconButton, InputAdornment, ClickAwayListener, } from '@mui/material';
 
 import { bgBlur } from 'src/theme/css';
 

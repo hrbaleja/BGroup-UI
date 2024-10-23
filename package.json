@@ -20,13 +20,10 @@
     "vite:build": "vite build"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
     "@faker-js/faker": "^8.1.0",
     "@iconify/react": "^5.0.2",
     "@mui/lab": "^5.0.0-alpha.147",
     "@mui/material": "^5.14.12",
-    "apexcharts": "^3.53.0",
     "@mui/x-date-pickers": "^7.19.0",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",

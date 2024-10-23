@@ -8,7 +8,7 @@ import Dialog from '@mui/material/Dialog';
 import Select from '@mui/material/Select';
 // import TableRow from '@mui/material/TableRow';
 import MenuItem from '@mui/material/MenuItem';
-// import TableHead from '@mui/material/TableHead';
+// import TableCell from '@mui/material/TableHead';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
@@ -20,7 +20,7 @@ import DialogActions from '@mui/material/DialogActions';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-// import { fNumbers } from 'src/utils/format-number';
+// import { fCurrency } from 'src/utils/format-number';
 
 import { PAGE_TITLES } from 'src/constants/page';
 import userService from 'src/services/users/userService';
@@ -37,6 +37,7 @@ import { emptyRows, applyFilter, getComparator } from 'src/components/table/util
 
 import DataTableRow from '../datatable-row';
 import NewTransaction from '../transaction-new';
+import SDataTableRow from '../datatable-summary';
 
 export default function TransactionView() {
   const [page, setPage] = useState(0);
@@ -137,6 +138,8 @@ export default function TransactionView() {
   });
 
   const notFound = !dataFiltered.length && !!filterName;
+  const totalRecords = transactions.length;
+  const totalAmount = transactions.reduce((acc, transaction) => acc + transaction.amount, 0);
 
   // const handleCompanySelect = useCallback(
   //   (companyId) => {
@@ -186,7 +189,7 @@ export default function TransactionView() {
       console.error('Error creating transaction:', error);
     }
   };
- 
+
   return (
     <Container maxWidth="xl">
       <Stack direction="row" justifyContent="space-between" mb={5}>
@@ -269,6 +272,10 @@ export default function TransactionView() {
                       fetchTransaction={fetchData}
                     />
                   ))}
+                  
+                <SDataTableRow
+                  transaction={totalRecords}
+                  transactionAmount={totalAmount} />
 
                 <TableEmptyRows
                   height={77}

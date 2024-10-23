@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions,  } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, } from '@mui/material';
 
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
@@ -71,7 +71,7 @@ export default function DataTableRow({
   return (
     <>
       <TableRow hover tabIndex={-1}>
-        <TableCell>{income.name}</TableCell>
+        <TableCell>{income.application}</TableCell>
         <TableCell>{`${fCurrency(income.profit)}`}</TableCell>
         <TableCell>{fCurrency(income.sharedProfit)}</TableCell>
         <TableCell>{fCurrency(income.finalAmount)}</TableCell>
@@ -112,7 +112,7 @@ export default function DataTableRow({
         onClose={() => setOpenDetailsDialog(false)}>
         <DialogTitle sx={{ borderBottom: '1px solid ', margin: ' 1rem', color: 'info.main' }}>   Income Details</DialogTitle>
         <DialogContent >
-          <Typography variant="body1"> <strong>Application No:</strong> {income.name}</Typography>
+          <Typography variant="body1"> <strong>Application No:</strong> {income.application}</Typography>
           <Typography variant="body1"><strong>Profit: </strong> {income.profit}</Typography>
           <Typography variant="body1"><strong>Shared Profit: </strong> {income.sharedProfit}</Typography>
           <Typography variant="body1"><strong>Final Amount:</strong>  {income.finalAmount}</Typography>
@@ -152,7 +152,7 @@ export default function DataTableRow({
 DataTableRow.propTypes = {
   income: PropTypes.shape({
     _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    application: PropTypes.string.isRequired,
     profit: PropTypes.number.isRequired,
     sharedProfit: PropTypes.number.isRequired,
     finalAmount: PropTypes.number.isRequired,

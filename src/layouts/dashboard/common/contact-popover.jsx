@@ -1,9 +1,6 @@
 import { useState } from 'react';
 
-import Box from '@mui/material/Box';
-import Popover from '@mui/material/Popover';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
+import { Box, Popover, MenuItem, IconButton } from '@mui/material'
 
 // ----------------------------------------------------------------------
 

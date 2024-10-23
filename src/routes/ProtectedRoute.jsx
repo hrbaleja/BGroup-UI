@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useState, useEffect, } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Box, CircularProgress } from '@mui/material';
 
 import { Logout, SetCookies } from 'src/function/auth';
 import authService from 'src/services/auth/authService';

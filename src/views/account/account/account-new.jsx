@@ -1,22 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 
-import {
-  Box,
-  Dialog,
-  Button,
-  MenuItem,
-  TextField,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from '@mui/material';
+import { Box, Dialog, Button, MenuItem, TextField, DialogTitle, DialogContent, DialogActions, } from '@mui/material';
 
-export default function NewAccount({ open, onClose, handleCreateCustomer,fetchNonCustomers  }) {
+export default function NewAccount({ open, onClose, handleCreateCustomer, fetchNonCustomers }) {
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [initialBalance, setInitialBalance] = useState(0);
-  const [formError, setFormError] = useState(false); 
+  const [formError, setFormError] = useState(false);
 
   useEffect(() => {
     if (open) {

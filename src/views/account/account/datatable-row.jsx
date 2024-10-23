@@ -3,27 +3,11 @@ import { useState, useCallback } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import {
-  Grid,
-  Stack,
-  Button,
-  Dialog,
-  Select,
-  Avatar,
-  Popover,
-  Snackbar,
-  TableRow,
-  MenuItem,
-  TextField,
-  TableCell,
-  Typography,
-  IconButton,
-  InputLabel,
-  FormControl,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
+  Grid, Stack, Button, Dialog, Select, Avatar, Popover, Snackbar, TableRow, MenuItem, TextField,
+  TableCell, Typography, IconButton, InputLabel, FormControl, DialogTitle, DialogContent, DialogActions,
 } from '@mui/material';
 
+import PublicService from 'src/services/public/publicService';
 import TransactionService from 'src/services/account/transactionService';
 
 import Label from 'src/components/label';
@@ -55,6 +39,7 @@ export default function DataTableRow({
 
   const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
   const handleCloseMenu = () => setAnchorEl(null);
+  const [token, setToken] = useState('');
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -114,15 +99,22 @@ export default function DataTableRow({
     }
   }, [transactionData, id, handleCloseDialog, fetchCustomer]);
 
-  const handleShareLink = useCallback(() => {
-    const link = `https://bgroupltd.vercel.app/account/${id}`;
-    setSnackbar({
-      open: true,
-      message: 'Link copied to clipboard!'
-    });
-    handleCloseMenu();
-    console.log(link);
-  }, [id]);
+  const handleShareLink = async () => {
+    setToken(null)
+    try {
+      const response = await PublicService.getTokenByCustomerId(id);
+      setToken(response.TokenId);
+      const link = `http://10.0.1.218:3030/account/${response.TokenId}`;
+      setSnackbar({
+        open: true,
+        message: 'Link copied to clipboard!'
+      });
+      handleCloseMenu();
+      console.log('Share link clicked!', link);
+    } catch (error) {
+      console.error('Error generating token:', error);
+    }
+  };
 
   return (
     <>
@@ -163,7 +155,7 @@ export default function DataTableRow({
           <Iconify icon="eva:plus-fill" sx={{ mr: 2 }} />
           Transaction
         </MenuItem>
-        <CopyToClipboard text={`https://bgroupltd.vercel.app/account/${id}`} onCopy={() => console.log("Link copied!")}>
+        <CopyToClipboard text={`http://10.0.1.218:3030/account/${token}`} onCopy={() => console.log("Link copied!")}>
           <MenuItem onClick={handleShareLink}>
             <Iconify icon="eva:share-fill" sx={{ mr: 2 }} />
             Share Link
