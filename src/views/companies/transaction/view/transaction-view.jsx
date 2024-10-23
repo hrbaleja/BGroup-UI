@@ -45,6 +45,7 @@ export default function TransactionView() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [noData, setNoData] = useState(false);
+  const [sortOptions, setSortOptions] = useState([]);
 
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
@@ -63,6 +64,14 @@ export default function TransactionView() {
 
       setUsers(usersResponse);
       setCompanies(companiesResponse);
+
+
+      const dynamicSortOptions = companiesResponse.slice(0, 4).map(company => ({
+        value: company._id,  // or whatever unique value represents the company
+        label: company.name, // or whatever property you want to display
+      }));
+
+      setSortOptions(dynamicSortOptions);
 
       const transactionsSummary = await transactionService.getTransactions();
       setTransactions(transactionsSummary);
@@ -116,9 +125,9 @@ export default function TransactionView() {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = (event) => {
+  const handleFilterByName = (value) => {
+    setFilterName(value);
     setPage(0);
-    setFilterName(event.target.value);
   };
 
   const dataFiltered = applyFilter({
@@ -162,13 +171,22 @@ export default function TransactionView() {
 
         setUsers(filteredUsers);
 
-        return selectedCompan; 
+        return selectedCompan;
       });
     },
     [transactions, users, companies]
   );
 
-
+  const handleSortChange = async (option) => {
+    setTransactions([])
+    try {
+      const transactionsSummary = await transactionService.getTransactionsByCompany(option.value);
+      setTransactions(transactionsSummary);
+    } catch (error) {
+      console.error('Error creating transaction:', error);
+    }
+  };
+ 
   return (
     <Container maxWidth="xl">
       <Stack direction="row" justifyContent="space-between" mb={5}>
@@ -198,8 +216,23 @@ export default function TransactionView() {
             filterName={filterName}
             onFilterName={handleFilterByName}
             filterFor={PAGE_TITLES.TRANSACTIONS}
+            sort
+            sortOptions={sortOptions}
+            // onFilter={handleFilter}
+            onSortChange={handleSortChange} // Pass the sorting handler here
           />
         )}
+
+        {/* {!noData && (
+          <TableToolbar
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            filterFor={PAGE_TITLES.TRANSACTIONS}
+            sort
+            sortOptions={sortOptions}
+            onFilter={handleFilter}
+          />
+        )} */}
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>

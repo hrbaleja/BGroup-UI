@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Tooltip from '@mui/material/Tooltip';
+import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -10,11 +10,10 @@ import { PAGE_TITLES } from 'src/constants/page';
 
 import Iconify from 'src/components/iconify';
 
+import TableSort from './table-sort';
 import TableFilters from './table-filters';
 
-
-
-export default function TableToolbar({ filterName, onFilterName, filters, onFilter, filterFor }) {
+export default function TableToolbar({ filterName, onFilterName, filters, onFilter, filterFor, sort = false, sortOptions, onSortChange }) {
   const [openFilter, setOpenFilter] = useState(false);
   const [searchTerm, setSearchTerm] = useState(filterName);
 
@@ -35,7 +34,6 @@ export default function TableToolbar({ filterName, onFilterName, filters, onFilt
 
   const hasCredential = filterFor !== PAGE_TITLES.CREDENTIALS;
 
-
   return (
 
     <Toolbar
@@ -49,7 +47,7 @@ export default function TableToolbar({ filterName, onFilterName, filters, onFilt
       <OutlinedInput
         value={searchTerm}
         onChange={handleSearchChange}
-        onKeyDown ={handleSearchKeyPress}
+        onKeyDown={handleSearchKeyPress}
         placeholder="Search ..."
         startAdornment={
           <InputAdornment position="start">
@@ -62,8 +60,14 @@ export default function TableToolbar({ filterName, onFilterName, filters, onFilt
       />
 
       {hasCredential && (
-        <Tooltip title="Filter">
-          <div>
+        <Stack
+          direction="row"
+          alignItems="center"
+          flexWrap="wrap-reverse"
+          justifyContent="flex-end"
+          sx={{ mb: 5 }}
+        >
+          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <TableFilters
               openFilter={openFilter}
               onOpenFilter={handleOpenFilter}
@@ -72,8 +76,14 @@ export default function TableToolbar({ filterName, onFilterName, filters, onFilt
               filters={filters}
               filterFor={filterFor}
             />
-          </div>
-        </Tooltip>
+            {sort && (
+              <TableSort
+                sortOptions={sortOptions}
+                onSortChange={onSortChange}
+              />
+            )}
+          </Stack>
+        </Stack>
       )}
     </Toolbar>
   );
@@ -85,4 +95,7 @@ TableToolbar.propTypes = {
   filters: PropTypes.object,
   onFilter: PropTypes.func,
   filterFor: PropTypes.string,
+  sort: PropTypes.bool,
+  sortOptions: PropTypes.array,
+  onSortChange: PropTypes.func, 
 };

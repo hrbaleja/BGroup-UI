@@ -8,6 +8,10 @@ const PublicService = {
     return response.data;
   },
 
+  getTokenByCustomerId: async (customerId) => {
+    const response = await api.post(`${PublicService.baseUrl}`, { customerId });
+    return response.data;
+  },
 };
 
 export default PublicService;

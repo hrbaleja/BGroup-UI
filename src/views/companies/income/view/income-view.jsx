@@ -154,7 +154,7 @@ export default function IncomeView() {
                         application: row.transactionId,
                         profit: row.profit,
                         sharedProfit: row.sharedProfit,
-                        finalAmount:row.finalAmount,
+                        finalAmount: row.finalAmount,
                         createdAt: row.createdAt,
                       }}
                       fetchIncomes={fetchIncomes}

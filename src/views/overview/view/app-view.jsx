@@ -145,7 +145,7 @@ export default function AppView() {
     }));
 
     return {
-      labels: uniqueDates.map((date) => new Date(date).getTime()), 
+      labels: uniqueDates.map((date) => new Date(date).getTime()),
       series,
     };
   };
@@ -246,11 +246,11 @@ export default function AppView() {
           </Grid>
           <Grid xs={12} sm={6} md={3}>
             <AppWidgetSummary
-              title="SME Companies"
-              total={statistics.smeCompany}
+              title="Income Amount"
+              total={statistics.incomeAmount}
               color="error"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-              to="/companies"
+              icon={<img alt="icon" src="/assets/icons/glass/ic_credit.jpg" />}
+              to="/income"
 
             />
           </Grid>
