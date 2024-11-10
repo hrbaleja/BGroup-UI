@@ -7,7 +7,7 @@ export const PATHS = {
 
   // Home Routes
   INDEX: '/',
-  Home: '/dashboard',
+  HOME: '/dashboard',
 
   // User and Profile Routes
   USER: '/user',
@@ -38,3 +38,11 @@ export const PATHS = {
 
   CUSTOMER: '/account/:id',
 };
+
+export const CATEGORIES = {
+  COMPANIES: 'Company',
+  GENERAL: 'General',
+  ACCOUNT: 'Account',
+  OTHER: 'Other Options',
+  SETTING: 'Settings '
+}

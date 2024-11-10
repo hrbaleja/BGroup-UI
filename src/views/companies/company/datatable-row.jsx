@@ -13,6 +13,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions, } from '@mui
 import { fDate } from 'src/utils/format-time';
 import { fCurrency } from 'src/utils/format-number';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import CompanyService from 'src/services/company/companyService';
 
 import Iconify from 'src/components/iconify';
@@ -130,7 +131,7 @@ export default function DataTableRow({ company, fetchCompanies }) {
           <Iconify icon="fluent:delete-16-filled" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
-        
+
       </Popover>
 
       <Dialog
@@ -149,17 +150,22 @@ export default function DataTableRow({ company, fetchCompanies }) {
       </Dialog>
 
       <Dialog
+        PaperProps={{
+          sx: {
+            minWidth: '400px',
+          },
+        }}
         open={openDetailsDialog}
         onClose={() => setOpenDetailsDialog(false)}>
-        <DialogTitle sx={{ borderBottom: '1px solid ', margin: ' 1rem', color: 'info.main' }}>
-       Company Details
+        <DialogTitle sx={{ borderBottom: '1px solid ', margin: ' 1rem', color: 'info.main', textAlign: 'center' }}>
+          {PAGE_TITLES.COMPANY}
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1"><strong>Name:</strong> {companydata.name}</Typography>
-          <Typography variant="body1"><strong>Start Date:</strong>{new Date(companydata.startDate).toLocaleDateString()}</Typography>
-          <Typography variant="body1"><strong>End Date:</strong>{new Date(companydata.endDate).toLocaleDateString()}</Typography>
-          <Typography variant="body1"><strong>Amount:</strong>: {companydata.amount}</Typography>
-          <Typography variant="body1"><strong>Lot Size:</strong> {companydata.lotSize}</Typography>
+          <Typography variant="body1"><strong>Name : </strong> {companydata.name}</Typography>
+          <Typography variant="body1"><strong>Start Date : </strong>{new Date(companydata.startDate).toLocaleDateString()}</Typography>
+          <Typography variant="body1"><strong>End Date : </strong>{new Date(companydata.endDate).toLocaleDateString()}</Typography>
+          <Typography variant="body1"><strong>Amount :</strong> {companydata.amount}</Typography>
+          <Typography variant="body1"><strong>Lot Size : </strong> {companydata.lotSize}</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDetailsDialog(false)} variant='outlined'>Close</Button>

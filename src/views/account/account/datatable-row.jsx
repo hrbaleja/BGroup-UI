@@ -3,11 +3,12 @@ import { useState, useCallback } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import {
-  Grid, Stack, Button, Dialog, Select, Avatar, Popover, Snackbar, TableRow, MenuItem, TextField,
+  Grid, Stack, Button, Dialog, Select, Avatar, Popover,  TableRow, MenuItem, TextField,
   TableCell, Typography, IconButton, InputLabel, FormControl, DialogTitle, DialogContent, DialogActions,
 } from '@mui/material';
 
 import PublicService from 'src/services/public/publicService';
+import { useNotification } from 'src/context/NotificationContext';
 import TransactionService from 'src/services/account/transactionService';
 
 import Label from 'src/components/label';
@@ -40,15 +41,8 @@ export default function DataTableRow({
   const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
   const handleCloseMenu = () => setAnchorEl(null);
   const [token, setToken] = useState('');
+  const { showNotification } = useNotification();
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: ''
-  });
-
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   const handleGetTransactions = useCallback(async () => {
     try {
@@ -105,10 +99,10 @@ export default function DataTableRow({
       const response = await PublicService.getTokenByCustomerId(id);
       setToken(response.TokenId);
       const link = `http://10.0.1.218:3030/account/${response.TokenId}`;
-      setSnackbar({
-        open: true,
-        message: 'Link copied to clipboard!'
+      showNotification('Link copied to clipboard!', {
+        severity: 'success',
       });
+      
       handleCloseMenu();
       console.log('Share link clicked!', link);
     } catch (error) {
@@ -162,22 +156,6 @@ export default function DataTableRow({
           </MenuItem>
         </CopyToClipboard>
       </Popover>
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message={snackbar.message}
-        action={
-          <IconButton
-            size="small"
-            color="inherit"
-            onClick={handleCloseSnackbar}
-          >
-            <Iconify icon="eva:close-fill" width={16} height={16} />
-          </IconButton>
-        }
-      />
 
       <Dialog open={openTransactionView} onClose={() => setOpenTransactionView(false)}
         PaperProps={{

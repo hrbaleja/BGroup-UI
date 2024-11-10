@@ -18,7 +18,6 @@ export default function NewCredential({ open, onClose, onSubmit }) {
     { field: 'site', required: true },
     { field: 'username', required: true },
     { field: 'password', required: true },
-    
   ];
 
   const handleInputChange = (e) => {

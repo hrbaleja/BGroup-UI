@@ -21,6 +21,7 @@ import TransactionService from 'src/services/account/transactionService';
 import Iconify from 'src/components/iconify';
 
 import TransactionList from '../../account/transaction-list';
+// import addPDFHeader from 'src/function/export';
 
 export default function AccountView() {
   const [selectedUser, setSelectedUser] = useState('');
@@ -103,7 +104,9 @@ export default function AccountView() {
         addPDFHeader(doc)
         doc.setFontSize(16);
         // doc.setTextColor(255, 98, 0)
+        doc.setFont('Helvetica', 'bold');
         doc.text('Transaction Report', 105, 31, { align: 'center' });
+        doc.setFont('Helvetica', 'normal');
         const selectedUserName = customer.find(user => user._id === selectedUser)?.name || 'Unknown';
         const selectedUserBalance = selectedUserInfo?.balance ?? 'N/A';
         const lastUpdatedAt = dayjs(selectedUserInfo?.updatedAt).format('DD-MM-YYYY HH:mm') || 'N/A';
@@ -172,7 +175,7 @@ export default function AccountView() {
         <Button
           variant="outlined"
           color="inherit"
-          startIcon={ <Iconify icon="fluent-color:clipboard-48" />}
+          startIcon={<Iconify icon="fluent-color:clipboard-48" />}
           aria-label="Create new account"
           onClick={() => navigate(PATHS.ACCOUNT)}
         >

@@ -12,7 +12,7 @@ export function Logout() {
 }
 
 export function SetCookies(accessToken, refreshToken) {
-   
+
     const decodedRFToken = jwtDecode(refreshToken);
     const { exp: exprf } = decodedRFToken
     const expirationRFTime = new Date(exprf * 1000);

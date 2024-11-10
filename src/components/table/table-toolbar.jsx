@@ -13,7 +13,8 @@ import Iconify from 'src/components/iconify';
 import TableSort from './table-sort';
 import TableFilters from './table-filters';
 
-export default function TableToolbar({ filterName, onFilterName, filters, onFilter, filterFor, sort = false, sortOptions, onSortChange }) {
+export default function TableToolbar({ filterName, onFilterName, filters, onFilter,
+  filterFor, sort = false, sortOptions, onSortChange }) {
   const [openFilter, setOpenFilter] = useState(false);
   const [searchTerm, setSearchTerm] = useState(filterName);
 
@@ -97,5 +98,5 @@ TableToolbar.propTypes = {
   filterFor: PropTypes.string,
   sort: PropTypes.bool,
   sortOptions: PropTypes.array,
-  onSortChange: PropTypes.func, 
+  onSortChange: PropTypes.func,
 };

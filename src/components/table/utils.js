@@ -36,6 +36,10 @@ export function getComparator(order, orderBy) {
 }
 
 export function applyFilter({ inputData, comparator, filterName }) {
+  if (!Array.isArray(inputData)) {
+    console.error("inputData is not an array:", inputData);
+    return [];
+  }
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -48,7 +52,8 @@ export function applyFilter({ inputData, comparator, filterName }) {
 
   if (filterName) {
     inputData = inputData.filter(
-      (companies) => companies.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (companies) =>
+        companies.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
     );
   }
 

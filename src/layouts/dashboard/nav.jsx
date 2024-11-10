@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect, } from 'react';
 
-import {  Box, alpha, Stack,  Drawer,  Avatar,  Typography,  ListItemButton,  } from '@mui/material';
+import { Box, alpha, Stack, Drawer, Avatar, Typography, ListItemButton, } from '@mui/material';
 
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
@@ -10,6 +10,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { account } from 'src/_mock/account';
 import { COMPANY_NAME } from 'src/constants/overview';
+import SettingService from 'src/services/setting/setting';
 
 import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
@@ -21,6 +22,20 @@ import { navConfig } from './config-navigation';
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
+  const [menuSettings, setMenuSettings] = useState([]);
+
+  useEffect(() => {
+    const fetchMenuSettings = async () => {
+      try {
+        const response = await SettingService.fetchMenuSettings();
+        setMenuSettings(response.data);
+      } catch (error) {
+        console.error('Error fetching menu settings:', error);
+      }
+    };
+
+    fetchMenuSettings();
+  }, []);
 
   const upLg = useResponsive('up', 'lg');
   useEffect(() => {
@@ -52,10 +67,24 @@ export default function Nav({ openNav, onCloseNav }) {
       </Box>
     </Box>
   );
+  const filteredNavConfig = navConfig.filter((item) =>
+    Array.isArray(menuSettings) &&
+    menuSettings.some((setting) => setting.category === item.category && setting.isVisible)
+  );
+
+
+  // const renderMenu = (
+  //   <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
+  //     {navConfig.filter(item => menuSettings.some(setting => setting.category === item.category && setting.isVisible)).map((item) => (
+  //       <NavItem key={item.title} item={item} />
+  //     ))}
+  //   </Stack>
+  // );
+
 
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-      {navConfig.map((item) => (
+      {filteredNavConfig.map((item) => (
         <NavItem key={item.title} item={item} />
       ))}
     </Stack>

@@ -17,6 +17,7 @@ import { SetCookies } from 'src/function/auth';
 import { VALIDATION_MESSAGES } from 'src/validation';
 import authService from 'src/services/auth/authService';
 import { LOGIN, API_MESSAGES } from 'src/constants/auth';
+import { useNotification } from 'src/context/NotificationContext';
 
 import Iconify from 'src/components/iconify';
 
@@ -28,6 +29,7 @@ const LoginView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState('');
+  const { showNotification } = useNotification();
 
   // useEffect(() => {
   //   const searchParams = new URLSearchParams(window.location.search);
@@ -59,9 +61,15 @@ const LoginView = () => {
       const { accessToken, refreshToken } = response;
       SetCookies(accessToken, refreshToken);
       const searchParams = new URLSearchParams(window.location.search);
-      const redirectPath = searchParams.get('redirect') || '/';
+      const redirectPath = searchParams.get('redirect') || PATHS.INDEX;
       router.push(redirectPath);
+      showNotification(API_MESSAGES.LOGIN_SUCCESS, {
+        severity: 'success',
+      });
     } catch (error) {
+      showNotification(error.response?.data?.message || API_MESSAGES.LOGIN_ERR, {
+        severity: 'error',
+      });
       setErrors(error.response?.data?.message || API_MESSAGES.LOGIN_ERR);
     } finally {
       setIsLoading(false);
@@ -71,12 +79,14 @@ const LoginView = () => {
   const renderForm = (
     <form onSubmit={handleLogin}>
       <Stack spacing={3}>
-        <TextField name="email" label="Email Address" required />
+        <TextField name="email" label="Email Address" required autoComplete="email"
+        />
         <TextField
           required
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
+          autoComplete="current-password"
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

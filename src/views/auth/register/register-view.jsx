@@ -15,6 +15,7 @@ import { validateName, validateEmail, validatePassword, } from 'src/utils/valida
 import { VALIDATION_MESSAGES } from 'src/validation';
 import authService from 'src/services/auth/authService';
 import { REGISTER, API_MESSAGES } from 'src/constants/auth';
+import { useNotification } from 'src/context/NotificationContext';
 
 import Iconify from 'src/components/iconify';
 
@@ -29,8 +30,11 @@ export default function RegisterView() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setError] = useState('');
+  const { showNotification } = useNotification();
 
-  const handleClick = async () => {
+  const handleClick = async (event) => {
+    event.preventDefault();
+
     setError('');
 
     try {
@@ -68,14 +72,23 @@ export default function RegisterView() {
       };
       const response = await authService.register(userData);
       if (response.status === 201) {
-        alert(API_MESSAGES.REGISTER_SUCCESS);
-        router.push(PATHS.LOGIN);
+
+        showNotification(API_MESSAGES.REGISTER_SUCCESS, {
+          severity: 'success',
+        });
+        router.push(PATHS.HOME);
       }
       else {
+        showNotification(response.response.data?.message || API_MESSAGES.REGISTER_ERR, {
+          severity: 'error',
+        });
         setError(response.response.data?.message || API_MESSAGES.REGISTER_ERR);
       }
     }
     catch (response) {
+      showNotification(response.response.data?.message || API_MESSAGES.REGISTER_ERR, {
+        severity: 'error',
+      });
       setError(response.response.data?.message || API_MESSAGES.REGISTER_ERR);
     }
     finally {
@@ -84,11 +97,12 @@ export default function RegisterView() {
   };
 
   const renderForm = (
-    <>
+    <form onSubmit={handleClick}> {/* Wrap inputs in a form */}
       <Stack spacing={3}>
         <TextField name="name" label="Full Name" required />
 
-        <TextField name="email" label="Email address" required />
+        <TextField name="email" label="Email address" required autoComplete="email" 
+        />
 
         <TextField
           name="password"
@@ -104,6 +118,7 @@ export default function RegisterView() {
             ),
           }}
           required
+          autoComplete="new-password" 
         />
 
         <TextField
@@ -120,8 +135,8 @@ export default function RegisterView() {
             ),
           }}
           required
+          autoComplete="new-password" // Add autocomplete attribute
         />
-
       </Stack>
 
       {errors && (
@@ -133,23 +148,22 @@ export default function RegisterView() {
       <LoadingButton
         fullWidth
         size="large"
-        type="submit"
+        type="submit" // Ensure the button submits the form
         variant="contained"
         color="inherit"
-        onClick={handleClick}
         loading={isLoading}
         sx={{ my: 3 }}
       >
-        {REGISTER}
+        Register
       </LoadingButton>
-    </>
+    </form>
   );
 
   return (
     <AuthView
       title={REGISTER}
       linkText="Already have an account?"
-      linkUrl="/login"
+      linkUrl={PATHS.LOGIN}
     >
       {renderForm}
     </AuthView>

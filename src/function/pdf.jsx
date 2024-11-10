@@ -102,7 +102,7 @@ const PDFViewer = ({ documentData }) => {
     });
     const [pdfVisible, setPdfVisible] = useState(false);
     const [pdfURL, setPdfURL] = useState('');
-   
+
     // const handleView = () => {
     //     const doc = generatePDF(documentData);
     //     const pdfURL = doc.output('bloburl');

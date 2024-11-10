@@ -103,8 +103,8 @@ export default function useChart(options) {
     },
 
     // Xaxis
-    xaxis: {  
-      
+    xaxis: {
+
 
       axisBorder: { show: false },
       axisTicks: { show: false },

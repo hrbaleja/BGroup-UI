@@ -4,7 +4,7 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
 
-import { PATHS } from './routes'; 
+import { PATHS } from './routes';
 import ProtectedRoute from './ProtectedRoute';
 
 // Authentication Pages
@@ -192,15 +192,15 @@ export default function Router() {
     },
     {
       path: PATHS.ANY,
-      element: isAuthenticated ? <Navigate to={PATHS.PAGE_404} replace /> : <HomePage />,
+      element: isAuthenticated ? <Navigate to={PATHS.PAGE_404} replace /> : <LoginPage />,
     },
     {
-      path: PATHS.Home,
-      element:<HomePage/>
+      path: PATHS.HOME,
+      element: <HomePage />
     },
     {
       path: PATHS.CUSTOMER,
-      element:<PublicPage/>
+      element: <PublicPage />
     },
   ]);
 

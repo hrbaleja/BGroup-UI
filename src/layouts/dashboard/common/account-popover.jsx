@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import {Box,alpha,Avatar,Divider,Popover,MenuItem,Typography,IconButton} from '@mui/material';
+import { Box, alpha, Avatar, Divider, Popover, MenuItem, Typography, IconButton } from '@mui/material';
 
 import { PATHS } from 'src/routes/routes';
 
@@ -92,9 +92,9 @@ export default function AccountPopover() {
           </Typography>
         </Box>
         <Divider sx={{ borderStyle: 'dashed' }} />
-          {MENU_OPTIONS.map((option) => (
+        {MENU_OPTIONS.map((option) => (
           <MenuItem key={option.label} onClick={() => handlenavigate(option.path)} >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               <Typography variant="body2">{option.label}</Typography>
               <Iconify icon={option.icon} />
             </Box>
@@ -106,10 +106,10 @@ export default function AccountPopover() {
           disableRipple
           disableTouchRipple
           onClick={handleLogout}
-          sx={{ typography: 'body2', color: 'error.main', py: 1.5 , display: 'flex', justifyContent: 'space-between', width: '100%'}}
+          sx={{ typography: 'body2', color: 'error.main', py: 1.5, display: 'flex', justifyContent: 'space-between', width: '100%' }}
         >
           Logout
-          <Iconify icon="line-md:speed-loop"/>
+          <Iconify icon="line-md:speed-loop" />
         </MenuItem>
       </Popover>
     </>
