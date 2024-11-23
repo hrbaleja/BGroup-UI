@@ -1,16 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
-import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Card, Stack, Table, Button, Switch, Container, TableBody, Typography, TableContainer, TablePagination, CircularProgress } from '@mui/material';
 
 import { PAGE_TITLES } from 'src/constants/page';
 import CompanyService from 'src/services/company/companyService';
@@ -32,8 +22,8 @@ export default function CompanyView() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [noData, setNoData] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [noData, setNoData] = useState(false);
 
   const [companies, setCompanies] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -42,12 +32,12 @@ export default function CompanyView() {
 
   const fetchCompanies = useCallback(async () => {
     setIsLoading(true);
+    setNoData(false);
     try {
       const response = await CompanyService.getCompanies(!isArchived);
       if (response.length === 0) {
         setNoData(true);
       }
-      setNoData(false);
       setCompanies(response);
     } catch (error) {
       console.error('Error fetching companies:', error);
@@ -176,7 +166,7 @@ export default function CompanyView() {
           />
         )}
       </Card>
-      
+
       <NewCompany
         open={openCreateDialog}
         onClose={() => setOpenCreateDialog(false)}

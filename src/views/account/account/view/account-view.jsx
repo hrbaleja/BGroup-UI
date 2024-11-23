@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { Card, Stack, Table, Button,Tooltip , Container, TableBody, Typography, TableContainer, TablePagination } from '@mui/material';
+import { Card, Stack, Table, Button, Tooltip, Container, TableBody, Typography, TableContainer, TablePagination } from '@mui/material';
 
 import { PATHS } from 'src/routes/routes';
 
@@ -9,6 +9,7 @@ import { fDateTime } from 'src/utils/format-time';
 import { fNumbers, fCurrency, } from 'src/utils/format-number';
 
 import { PAGE_TITLES } from 'src/constants/page';
+import { useNotification } from 'src/context/NotificationContext';
 import AccountsService from 'src/services/account/accountsService';
 
 import Iconify from 'src/components/iconify';
@@ -19,6 +20,7 @@ import TableToolbar from 'src/components/table/table-toolbar';
 
 import NewAccount from '../account-new';
 import DataTableRow from '../datatable-row';
+
 
 export default function AccountView() {
   const [page, setPage] = useState(0);
@@ -32,6 +34,7 @@ export default function AccountView() {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [filters, setFilters] = useState({ balanceType: '', amount: 0 });
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const fetchAccounts = useCallback(async () => {
     try {
@@ -55,11 +58,14 @@ export default function AccountView() {
 
       setCustomer(response.accounts);
       setTotalCount(response.pagination.totalDocs);
+      
     } catch (error) {
-      console.error('Error fetching accounts:', error);
+      showNotification(error, {
+        severity: 'error',
+      });
       setNoData(true);
     }
-  }, [page, rowsPerPage, order, orderBy, filterName, filters]);
+  }, [page, rowsPerPage, order, orderBy, filterName, filters, showNotification]);
 
 
   useEffect(() => {
@@ -83,6 +89,7 @@ export default function AccountView() {
         balance: initialBalance,
       });
       fetchAccounts();
+
     } catch (error) {
       console.error('Error creating customer:', error);
     }

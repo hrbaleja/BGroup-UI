@@ -20,7 +20,6 @@ export function NotificationProvider({ children }) {
       severity: options.severity || 'info',
       autoHideDuration: options.autoHideDuration || 2000,
       ...options,
-
     };
 
     setNotifications(prev => [...prev, notification]);
@@ -47,7 +46,7 @@ export function NotificationProvider({ children }) {
 
         >
           <Alert
-            variant="filled"
+            // variant="filled"
             severity={notification.severity}
             onClose={() => closeNotification(notification.id)}
           >

@@ -2,7 +2,6 @@ import api from '../config';
 
 const AccountsService = {
   baseUrl: '/accounts',
-
   createCustomer: async (customerData) => {
     const response = await api.post(AccountsService.baseUrl, customerData);
     return response.data;

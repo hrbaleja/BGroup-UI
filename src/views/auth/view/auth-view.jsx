@@ -14,9 +14,10 @@ import { alpha, useTheme } from '@mui/material/styles';
 
 import { bgGradient } from 'src/theme/css';
 import { FORGOTPWD } from 'src/constants/auth';
-import { COMPANY_NAME } from 'src/constants/overview';
 
 import Iconify from 'src/components/iconify';
+
+const COMPANY_NAME = import.meta.env.VITE_APP_NAME;
 
 const AuthView = ({ children, title, linkText, linkUrl }) => {
     const theme = useTheme();

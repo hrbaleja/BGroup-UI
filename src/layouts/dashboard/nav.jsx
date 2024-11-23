@@ -9,7 +9,6 @@ import { RouterLink } from 'src/routes/components';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { account } from 'src/_mock/account';
-import { COMPANY_NAME } from 'src/constants/overview';
 import SettingService from 'src/services/setting/setting';
 
 import Logo from 'src/components/logo';
@@ -17,6 +16,8 @@ import Scrollbar from 'src/components/scrollbar';
 
 import { NAV } from './config-layout';
 import { navConfig } from './config-navigation';
+
+const COMPANY_NAME = import.meta.env.VITE_APP_NAME;
 
 // ----------------------------------------------------------------------
 

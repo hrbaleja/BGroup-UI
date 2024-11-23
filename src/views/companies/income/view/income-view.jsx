@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
+import { Card, Stack, Table, Button, Container, TableBody, Typography, TableContainer, TablePagination } from '@mui/material';
 
 import { PAGE_TITLES } from 'src/constants/page';
 import incomeService from 'src/services/company/incomeService';
@@ -143,6 +135,7 @@ export default function IncomeView() {
                     { id: '', label: 'Action' },
                   ]}
                 />)}
+
               <TableBody>
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -161,10 +154,12 @@ export default function IncomeView() {
                       transactions={transactions}
                     />
                   ))}
+
                 <TableEmptyRows
                   height={77}
                   emptyRows={emptyRows(page, rowsPerPage, incomes.length)}
                 />
+
                 {(notFound || noData) && <TableNoData query={filterName} />}
               </TableBody>
             </Table>

@@ -13,3 +13,16 @@ export const PAGE_TITLES = {
   HOME: 'HomePage',
   CONFIGURATION: "Configuration Setting",
 };
+
+export const SORTDIRECTION = {
+  ASC: 0,
+  DESC: 1,
+};
+
+export const PAGINATION = {
+  PAGE: 0,
+  LIMIT: 5,
+  SORT_DIR: SORTDIRECTION.DESC,
+  SORT_BY: 'createdAt',
+  SEARCH: '',
+};

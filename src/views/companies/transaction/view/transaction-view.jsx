@@ -1,26 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import Select from '@mui/material/Select';
-// import TableRow from '@mui/material/TableRow';
-import MenuItem from '@mui/material/MenuItem';
-// import TableCell from '@mui/material/TableHead';
-import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-
-// import { fCurrency } from 'src/utils/format-number';
+import {
+  Card, Stack, Table, Button, Dialog, Select, MenuItem, Container, TableBody, Typography, InputLabel, FormControl,
+  DialogTitle, DialogContent, DialogActions, TableContainer, TablePagination} from '@mui/material';
 
 import { PAGE_TITLES } from 'src/constants/page';
 import userService from 'src/services/users/userService';
@@ -68,8 +50,8 @@ export default function TransactionView() {
 
 
       const dynamicSortOptions = companiesResponse.slice(0, 4).map(company => ({
-        value: company._id,  // or whatever unique value represents the company
-        label: company.name, // or whatever property you want to display
+        value: company._id, 
+        label: company.name, 
       }));
 
       setSortOptions(dynamicSortOptions);
@@ -222,7 +204,7 @@ export default function TransactionView() {
             sort
             sortOptions={sortOptions}
             // onFilter={handleFilter}
-            onSortChange={handleSortChange} // Pass the sorting handler here
+            onSortChange={handleSortChange} 
           />
         )}
 
@@ -272,15 +254,18 @@ export default function TransactionView() {
                       fetchTransaction={fetchData}
                     />
                   ))}
-                  
-                <SDataTableRow
-                  transaction={totalRecords}
-                  transactionAmount={totalAmount} />
+
+                {!noData && (
+                  <SDataTableRow
+                    transaction={totalRecords}
+                    transactionAmount={totalAmount} />
+                )}
 
                 <TableEmptyRows
                   height={77}
                   emptyRows={emptyRows(page, rowsPerPage, transactions.length)}
                 />
+
                 {(notFound || noData) && <TableNoData query={filterName} />}
               </TableBody>
             </Table>

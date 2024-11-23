@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import {
-  Grid, Stack, Button, Dialog, Select, Avatar, Popover,  TableRow, MenuItem, TextField,
+  Grid, Stack, Button, Dialog, Select, Avatar, Popover, TableRow, MenuItem, TextField,
   TableCell, Typography, IconButton, InputLabel, FormControl, DialogTitle, DialogContent, DialogActions,
 } from '@mui/material';
 
@@ -15,6 +15,8 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
 import TransactionList from './transaction-list';
+
+const APP_URL = import.meta.env.VITE_APP_URL;
 
 const initialTransactionData = {
   customerId: '',
@@ -98,15 +100,16 @@ export default function DataTableRow({
     try {
       const response = await PublicService.getTokenByCustomerId(id);
       setToken(response.TokenId);
-      const link = `http://10.0.1.218:3030/account/${response.TokenId}`;
       showNotification('Link copied to clipboard!', {
         severity: 'success',
       });
-      
       handleCloseMenu();
-      console.log('Share link clicked!', link);
+      console.log(`http://10.0.1.218:3030/account/${response.TokenId}`);
     } catch (error) {
-      console.error('Error generating token:', error);
+      showNotification('Error in generating Link!', {
+        severity: 'error',
+      });
+      console.error('Error generating Link:', error);
     }
   };
 
@@ -149,7 +152,7 @@ export default function DataTableRow({
           <Iconify icon="eva:plus-fill" sx={{ mr: 2 }} />
           Transaction
         </MenuItem>
-        <CopyToClipboard text={`http://10.0.1.218:3030/account/${token}`} onCopy={() => console.log("Link copied!")}>
+        <CopyToClipboard text={`${APP_URL}account/${token}`} onCopy={() => console.log("Link copied!")}>
           <MenuItem onClick={handleShareLink}>
             <Iconify icon="eva:share-fill" sx={{ mr: 2 }} />
             Share Link
@@ -157,13 +160,16 @@ export default function DataTableRow({
         </CopyToClipboard>
       </Popover>
 
-      <Dialog open={openTransactionView} onClose={() => setOpenTransactionView(false)}
+      <Dialog
+        open={openTransactionView}
+        onClose={() => setOpenTransactionView(false)}
         PaperProps={{
           sx: {
-            minWidth: '800px',
-            maxWidth: '800px',
+            minWidth: { xs: '90%', sm: '800px' },
+            maxWidth: { xs: '90%', sm: '800px' },
           },
-        }}>
+        }}
+      >
         <DialogTitle>{name}</DialogTitle>
         <DialogContent>
           <TransactionList transactions={transactions} />

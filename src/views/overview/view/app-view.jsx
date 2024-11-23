@@ -17,6 +17,7 @@ import CompanyStatisticsService from 'src/services/overview/dashboard';
 import Iconify from 'src/components/iconify';
 
 import AppTasks from '../app-tasks';
+import WordSorter from '../wordSorter';
 import AppNewsUpdate from '../app-news-update';
 import AppOrderTimeline from '../app-order-timeline';
 import AppCurrentVisits from '../app-current-visits';
@@ -239,7 +240,7 @@ export default function AppView() {
               title="Main Companies"
               total={statistics.mainCompany}
               color="warning"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
+              icon={<img alt="icon" src="/assets/icons/glass/ic_industry.jpg" />}
               to="/companies"
 
             />
@@ -351,7 +352,7 @@ export default function AppView() {
           <Grid xs={12} md={6} lg={8}>
             <AppTasks title="Tasks" subheader={`You have ${taskss.length} pending tasks`} />
           </Grid>
-
+          <WordSorter />
           <Grid xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="News Update"

@@ -50,14 +50,14 @@ export default function UserView() {
         name: filterName,
         role: filters.role,
         isActive: filters.isActive,
-        isVerified:filters.isVerified
+        isVerified: filters.isVerified
       };
-      const response = await UserService.fetchUsers(isDematUsers,filterParams);
+      const response = await UserService.fetchUsers(isDematUsers, filterParams);
       setUsers(response);
     } catch (error) {
       console.error('Error fetching Users:', error);
     }
-  }, [isDematUsers,page, rowsPerPage, order, orderBy, filterName, filters]);
+  }, [isDematUsers, page, rowsPerPage, order, orderBy, filterName, filters]);
 
   useEffect(() => {
     fetchUsers();
@@ -111,11 +111,34 @@ export default function UserView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+      {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
         <Typography variant="h4">{PAGE_TITLES.USERS}</Typography>
         <Stack direction="row" spacing={2} alignItems="center">
           <Typography>Demat Users:</Typography>
           <Switch checked={isDematUsers} onChange={(e) => setDematUsers(e.target.checked)} />
+          <Button
+            variant="outlined"
+            color="inherit"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => setOpenCreateDialog(true)}
+          >
+            New
+          </Button>
+        </Stack>
+      </Stack> */}
+
+      <Stack direction="row" alignItems="left" justifyContent="space-between" mb={3}
+        sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Typography variant="h4" sx={{ textAlign: 'centre', mb: 1 }}>{PAGE_TITLES.USERS}</Typography>
+        <Stack direction="row" spacing={0} alignItems="center"
+          sx={{ justifyContent: 'space-between', alignItems: 'center', }}>
+          <Stack direction="row" spacing={0} alignItems="center">
+            <Typography>Demat Users:</Typography>
+            <Switch
+              checked={isDematUsers}
+              onChange={(e) => setDematUsers(e.target.checked)}
+            />
+          </Stack>
           <Button
             variant="outlined"
             color="inherit"
