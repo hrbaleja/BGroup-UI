@@ -17,8 +17,8 @@ export function addPDFHeader(doc) {
     const xCenter = (doc.internal.pageSize.getWidth() - textWidth) / 2.5;
     doc.text(companyText, xCenter, 12);
 
-    doc.setFontSize(12);
-    doc.setTextColor('#777');
+    doc.setFontSize(9);
+    doc.setTextColor('#088F8F');
     doc.setFont('Helvetica', 'normal');
     const taglineText = '';
     const taglineWidth = doc.getTextWidth(taglineText);
