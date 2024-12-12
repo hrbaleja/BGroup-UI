@@ -1,6 +1,8 @@
-import { COMPANY_NAME } from "src/constants/overview";
 
 import { logoBase64 } from "./logo";
+
+const APPNAME = import.meta.env.VITE_APP_NAME;
+
 
 export function addPDFHeader(doc) {
     const logoWidth = 20;
@@ -10,7 +12,7 @@ export function addPDFHeader(doc) {
     doc.setFontSize(26);
     doc.setTextColor('#FF6200');
     doc.setFont('Helvetica', 'bold');
-    const companyText = COMPANY_NAME;
+    const companyText = APPNAME;
     const textWidth = doc.getTextWidth(companyText);
     const xCenter = (doc.internal.pageSize.getWidth() - textWidth) / 2.5;
     doc.text(companyText, xCenter, 12);

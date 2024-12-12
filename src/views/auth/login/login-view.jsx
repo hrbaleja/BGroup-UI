@@ -14,9 +14,10 @@ import { useRouter } from 'src/routes/hooks';
 import { validateEmail } from 'src/utils/validation';
 
 import { SetCookies } from 'src/function/auth';
+import { PAGE_TITLES } from 'src/constants/page';
 import { VALIDATION_MESSAGES } from 'src/validation';
+import {APIMESSAGES,  } from 'src/constants/messages';
 import authService from 'src/services/auth/authService';
-import { LOGIN, API_MESSAGES } from 'src/constants/auth';
 import { useNotification } from 'src/context/NotificationContext';
 
 import Iconify from 'src/components/iconify';
@@ -34,7 +35,7 @@ const LoginView = () => {
   // useEffect(() => {
   //   const searchParams = new URLSearchParams(window.location.search);
   //   if (searchParams.size > 0) {
-  //     // setErrors(API_MESSAGES.TOKEN_ERR);
+  //     // setErrors(APIMESSAGES.TOKEN_ERR);
   //   }
 
   // }, []);
@@ -61,16 +62,16 @@ const LoginView = () => {
       const { accessToken, refreshToken } = response;
       SetCookies(accessToken, refreshToken);
       const searchParams = new URLSearchParams(window.location.search);
-      const redirectPath = searchParams.get('redirect') || PATHS.INDEX;
+      const redirectPath = searchParams.get('redirect') || PATHS.DASHBOARD;
       router.push(redirectPath);
-      showNotification(API_MESSAGES.LOGIN_SUCCESS, {
+      showNotification(APIMESSAGES.LOGIN_SUCCESS, {
         severity: 'success',
       });
     } catch (error) {
-      showNotification(error.response?.data?.message || API_MESSAGES.LOGIN_ERR, {
+      showNotification(error.response?.data?.message || APIMESSAGES.LOGIN_ERR, {
         severity: 'error',
       });
-      setErrors(error.response?.data?.message || API_MESSAGES.LOGIN_ERR);
+      setErrors(error.response?.data?.message || APIMESSAGES.LOGIN_ERR);
     } finally {
       setIsLoading(false);
     }
@@ -119,14 +120,14 @@ const LoginView = () => {
         color="inherit"
         loading={isLoading}
       >
-        {LOGIN}
+        {PAGE_TITLES.LOGIN}
       </LoadingButton>
     </form>
   );
 
   return (
     <AuthView
-      title={LOGIN}
+      title={PAGE_TITLES.LOGIN}
       linkText="Don't have an account?"
       linkUrl={PATHS.REGISTER}
     >

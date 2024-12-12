@@ -9,9 +9,9 @@ const icon = (name) => (
 
 export const navConfig = [
   {
-    title: 'Home',
-    path: PATHS.INDEX,
-    icon: icon('ic_home'),
+    title: 'Dashboard',
+    path: PATHS.DASHBOARD,
+    icon: icon('ic_dashboard'),
     category: CATEGORIES.GENERAL,
   },
   {
@@ -53,16 +53,6 @@ export const navConfig = [
     category: CATEGORIES.OTHER,
 
   },
-  // {
-  //   title: 'product',
-  //   path: PATHS.PRODUCTS,
-  //   icon: icon('ic_cart'),
-  // },
-  // {
-  //   title: 'blog',
-  //   path: PATHS.BLOG,
-  //   icon: icon('ic_blog'),
-  // },
 ];
 
 export default navConfig;

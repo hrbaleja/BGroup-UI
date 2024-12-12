@@ -42,7 +42,7 @@ export default function AccountView() {
   const fetchAccounts = useCallback(async () => {
     try {
       const response = await AccountsService.fetchCustomersdropdown();
-      setCustomer(response);
+      setCustomer(response.data);
     } catch (error) {
       console.error('Error fetching accounts:', error);
     }

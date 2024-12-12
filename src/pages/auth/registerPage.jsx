@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { REGISTER } from 'src/constants/auth';
+import { PAGE_TITLES } from 'src/constants/page';
 import { RegisterView } from 'src/views/auth/register';
 
 // ----------------------------------------------------------------------
@@ -9,7 +9,7 @@ export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> {REGISTER} </title>
+        <title> {PAGE_TITLES.REGISTER} </title>
       </Helmet>
 
       <RegisterView />

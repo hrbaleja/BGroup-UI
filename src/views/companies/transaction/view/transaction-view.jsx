@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import {
   Card, Stack, Table, Button, Dialog, Select, MenuItem, Container, TableBody, Typography, InputLabel, FormControl,
-  DialogTitle, DialogContent, DialogActions, TableContainer, TablePagination} from '@mui/material';
+  DialogTitle, DialogContent, DialogActions, TableContainer, TablePagination
+} from '@mui/material';
 
 import { PAGE_TITLES } from 'src/constants/page';
 import userService from 'src/services/users/userService';
@@ -16,6 +17,11 @@ import TableNoData from 'src/components/table/table-no-data';
 import TableToolbar from 'src/components/table/table-toolbar';
 import TableEmptyRows from 'src/components/table/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from 'src/components/table/utils';
+
+import { addPDFHeader } from 'src/function/export';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import dayjs from 'dayjs';
 
 import DataTableRow from '../datatable-row';
 import NewTransaction from '../transaction-new';
@@ -50,8 +56,8 @@ export default function TransactionView() {
 
 
       const dynamicSortOptions = companiesResponse.slice(0, 4).map(company => ({
-        value: company._id, 
-        label: company.name, 
+        value: company._id,
+        label: company.name,
       }));
 
       setSortOptions(dynamicSortOptions);
@@ -172,6 +178,72 @@ export default function TransactionView() {
     }
   };
 
+  const handleExportTransactions = () => {
+    if (transactions.length === 0) {
+      console.error('No transactions available for export');
+      return;
+    }
+
+    const doc = new jsPDF();
+    addPDFHeader(doc);
+
+    // Set title
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#088F8F');
+    doc.text('One MobiKwik Systems Limited', doc.internal.pageSize.width / 2.4, 20, { align: 'center' });
+    doc.setTextColor('#777');
+
+    // Prepare table data
+    const tableData = transactions.map((transaction, index) => [
+      index + 1,
+      // transaction.company?.name || 'N/A',
+      transaction.user?.name || 'N/A',
+      transaction.lotSize || 'N/A',
+      dayjs(transaction.appliedDate).format('DD-MM-YYYY') || 'N/A',
+      transaction.grantedBy?.name || 'N/A',
+      transaction.amount ? transaction.amount.toLocaleString() : 'N/A',
+      transaction.applicationNo || 'N/A',
+      transaction.remarks || 'UPI Self'
+    ]);
+
+    // Generate PDF table
+    doc.autoTable({
+      head: [['No', 'Name', 'Lot Size', 'Applied Date', 'Granted By', 'Amount', 'Application No', 'Method']],
+      body: tableData,
+      startY: 30,
+      theme: 'striped',
+      margin: { top: 3, left: 3, right: 3, bottom: 3 },
+      // styles: {
+      //   fontSize: 9,
+      //   cellPadding: 2,
+      // },
+      columnStyles: {
+        0: { cellWidth: 11 },  // #
+        // 1: { cellWidth: 30 },  // Company
+        1: { cellWidth: 30 },  // Name
+        2: { cellWidth: 20, halign: 'center' },  // Lot Size
+        3: { cellWidth: 28 },  // Applied Date
+        4: { cellWidth: 35 },  // Granted By
+        5: { cellWidth: 20, halign: 'right' },  // Amount
+        6: { cellWidth: 30 },  // Is Own
+        7: { cellWidth: 30 },  // Is Alloted
+      }
+    });
+
+    // Add summary information
+    const pageHeight = doc.internal.pageSize.height;
+    doc.setFontSize(10);
+    doc.setTextColor('#088F8F');
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Total Transactions: ${transactions.length}`, 14, pageHeight - 20);
+    doc.text(`Total Amount: ${totalAmount.toLocaleString()}`, 14, pageHeight - 10);
+
+    // Save the PDF
+    const filename = `Transactions_${dayjs().format('HHmmss')}.pdf`;
+    doc.save(filename);
+  };
+
   return (
     <Container maxWidth="xl">
       <Stack direction="row" justifyContent="space-between" mb={5}>
@@ -193,6 +265,15 @@ export default function TransactionView() {
           >
             New
           </Button>
+
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<Iconify icon="solar:document-download-bold" />}
+            onClick={handleExportTransactions}
+          >
+            <Iconify icon="eva:download-fill" />
+          </Button>
         </Stack>
       </Stack>
       <Card>
@@ -204,7 +285,7 @@ export default function TransactionView() {
             sort
             sortOptions={sortOptions}
             // onFilter={handleFilter}
-            onSortChange={handleSortChange} 
+            onSortChange={handleSortChange}
           />
         )}
 

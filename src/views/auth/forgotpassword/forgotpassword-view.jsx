@@ -9,9 +9,10 @@ import { PATHS } from 'src/routes/routes';
 
 import { validateEmail } from 'src/utils/validation';
 
+import { PAGE_TITLES } from 'src/constants/page';
 import { VALIDATION_MESSAGES } from 'src/validation';
+import {APIMESSAGES,  } from 'src/constants/messages';
 import authService from 'src/services/auth/authService';
-import {FORGOTPWD, API_MESSAGES,  } from 'src/constants/auth';
 
 import { AuthView } from '../view';
 
@@ -41,10 +42,10 @@ const ForgotPasswordView = () => {
       setSuccess('');
   
       await authService.forgotPassword(email);
-      setSuccess(API_MESSAGES.FORGOTPWD_SUCCESS);
+      setSuccess(APIMESSAGES.FORGOTPWD_SUCCESS);
     } 
     catch (error) {
-      setError(error.response?.data?.message || API_MESSAGES.FORGOTPWD_ERR);
+      setError(error.response?.data?.message || APIMESSAGES.FORGOTPWD_ERR);
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +97,7 @@ const ForgotPasswordView = () => {
 
   return (
     <AuthView
-      title={FORGOTPWD}
+      title={PAGE_TITLES.FORGOTPWD}
       linkText="Remember your password?"
       linkUrl={PATHS.LOGIN}
     >

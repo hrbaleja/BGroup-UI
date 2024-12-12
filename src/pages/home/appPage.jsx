@@ -1,7 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 
-import { PAGE_TITLES } from 'src/constants/page';
 import { AppView } from 'src/views/overview/view';
+
+const APPNAME = import.meta.env.VITE_APP_NAME;
 
 // ----------------------------------------------------------------------
 
@@ -10,7 +11,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title>{PAGE_TITLES.INDEX}</title>
+        <title>{APPNAME}</title>
       </Helmet>
 
       <AppView />

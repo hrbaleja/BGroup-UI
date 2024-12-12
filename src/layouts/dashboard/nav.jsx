@@ -9,7 +9,7 @@ import { RouterLink } from 'src/routes/components';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { account } from 'src/_mock/account';
-import SettingService from 'src/services/setting/setting';
+// import SettingService from 'src/services/setting/setting';
 
 import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
@@ -17,7 +17,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { NAV } from './config-layout';
 import { navConfig } from './config-navigation';
 
-const COMPANY_NAME = import.meta.env.VITE_APP_NAME;
+const APPNAME = import.meta.env.VITE_APP_NAME;
 
 // ----------------------------------------------------------------------
 
@@ -25,18 +25,18 @@ export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
   const [menuSettings, setMenuSettings] = useState([]);
 
-  useEffect(() => {
-    const fetchMenuSettings = async () => {
-      try {
-        const response = await SettingService.fetchMenuSettings();
-        setMenuSettings(response.data);
-      } catch (error) {
-        console.error('Error fetching menu settings:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchMenuSettings = async () => {
+  //     try {
+  //       const response = await SettingService.fetchMenuSettings();
+  //       setMenuSettings(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching menu settings:', error);
+  //     }
+  //   };
 
-    fetchMenuSettings();
-  }, []);
+  //   fetchMenuSettings();
+  // }, []);
 
   const upLg = useResponsive('up', 'lg');
   useEffect(() => {
@@ -61,17 +61,17 @@ export default function Nav({ openNav, onCloseNav }) {
     >
       <Avatar src={account.logoURL} alt="photoURL" />
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{COMPANY_NAME}</Typography>
+        <Typography variant="subtitle2">{APPNAME}</Typography>
         {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {account.role}
         </Typography> */}
       </Box>
     </Box>
   );
-  const filteredNavConfig = navConfig.filter((item) =>
-    Array.isArray(menuSettings) &&
-    menuSettings.some((setting) => setting.category === item.category && setting.isVisible)
-  );
+  // const filteredNavConfig = navConfig.filter((item) =>
+  //   Array.isArray(menuSettings) &&
+  //   menuSettings.some((setting) => setting.category === item.category && setting.isVisible)
+  // );
 
 
   // const renderMenu = (
@@ -85,7 +85,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-      {filteredNavConfig.map((item) => (
+      {navConfig.map((item) => (
         <NavItem key={item.title} item={item} />
       ))}
     </Stack>
@@ -107,7 +107,7 @@ export default function Nav({ openNav, onCloseNav }) {
   //         target="_blank"
   //         variant="contained"
   //         color="inherit"
-  //       >          {COMPANY_NAME}</Button>
+  //       >          {APPNAME}</Button>
   //     </Stack>
   //   </Box>
   // );
@@ -120,6 +120,8 @@ export default function Nav({ openNav, onCloseNav }) {
           height: 1,
           display: 'flex',
           flexDirection: 'column',
+          backgroundColor: 'background.paper',
+          boxShadow: 'theme.customShadows.card',
         },
       }}
     >
@@ -188,7 +190,7 @@ function NavItem({ item }) {
         textTransform: 'capitalize',
         fontWeight: 'fontWeightMedium',
         ...(isActive && {
-          color: 'primary.main',
+          color: 'primary.darker',
           fontWeight: 'fontWeightSemiBold',
           bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
           '&:hover': {

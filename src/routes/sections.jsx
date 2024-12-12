@@ -13,8 +13,8 @@ export const RegisterPage = lazy(() => import('src/pages/auth/registerPage'));
 export const ForgotPasswordPage = lazy(() => import('src/pages/auth/forgotpasswordPage'));
 
 // Home Pages
-export const IndexPage = lazy(() => import('src/pages/home/appPage'));
-export const HomePage = lazy(() => import('src/pages/home/homePage'));
+export const DashboardPage = lazy(() => import('src/pages/home/appPage'));
+export const IndexPage = lazy(() => import('src/pages/home/homePage'));
 
 // User and Profile Pages
 export const UserPage = lazy(() => import('src/pages/users/userPage'));
@@ -61,12 +61,13 @@ export default function Router() {
       ),
       children: [
         {
+          path: PATHS.DASHBOARD,
           element: (
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <IndexPage />
+              <DashboardPage />
             </ProtectedRoute>
           ),
-          index: true,
+          // index: true,
         },
         {
           path: PATHS.USER,
@@ -192,11 +193,11 @@ export default function Router() {
     },
     {
       path: PATHS.ANY,
-      element: isAuthenticated ? <Navigate to={PATHS.PAGE_404} replace /> : <LoginPage />,
+      element: isAuthenticated ? <Page404 /> : <LoginPage />,
     },
     {
-      path: PATHS.HOME,
-      element: <HomePage />
+      path: PATHS.INDEX,
+      element: isAuthenticated ? <DashboardLayout /> : <IndexPage />,
     },
     {
       path: PATHS.CUSTOMER,

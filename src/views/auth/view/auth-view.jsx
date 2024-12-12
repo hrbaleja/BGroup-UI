@@ -13,11 +13,11 @@ import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import { bgGradient } from 'src/theme/css';
-import { FORGOTPWD } from 'src/constants/auth';
+import { PAGE_TITLES } from 'src/constants/page';
 
 import Iconify from 'src/components/iconify';
 
-const COMPANY_NAME = import.meta.env.VITE_APP_NAME;
+const APPNAME = import.meta.env.VITE_APP_NAME;
 
 const AuthView = ({ children, title, linkText, linkUrl }) => {
     const theme = useTheme();
@@ -37,13 +37,13 @@ const AuthView = ({ children, title, linkText, linkUrl }) => {
             }}
         >
             <Helmet>
-                <title>{title} - {COMPANY_NAME}</title>
+                <title>{title} - {APPNAME}</title>
             </Helmet>
             <Box>
                 <Stack alignItems="center" justifyContent="center">
                     <Card sx={{ p: 5, width: 1, maxWidth: 420, minWidth: 380, }}>
                         <Typography variant="h4" textAlign="center">
-                            {title === FORGOTPWD ? COMPANY_NAME : `${title} to ${COMPANY_NAME}`}
+                            {title === PAGE_TITLES.FORGOTPWD ? APPNAME : `${title} to ${APPNAME}`}
                         </Typography>
 
                         <Typography variant="body2" sx={{ mt: 2, mb: 5 }} />

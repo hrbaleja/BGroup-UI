@@ -9,16 +9,17 @@ import {
 import { validateForm } from 'src/validation/validation';
 
 export default function NewTransaction({ open, onClose, onSubmit, users, companies }) {
+  const today = new Date().toISOString().split('T')[0];
   const initialTransactionState = {
     user: '',
     company: '',
-    lotSize: '',
-    appliedDate: '',
+    lotSize: '1',
+    appliedDate: today,
     is_own: false,
-    grantedBy: '',
+    grantedBy: '665169a1608ccd96f62132b8',
     amount: '',
     is_alloted: false,
-    remarks: '',
+    remarks: 'ASBA',
     applicationNo: '',
   };
 
@@ -34,6 +35,7 @@ export default function NewTransaction({ open, onClose, onSubmit, users, compani
     { field: 'remarks', required: true },
     { field: 'applicationNo', required: true },
   ];
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

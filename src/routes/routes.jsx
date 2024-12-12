@@ -1,13 +1,13 @@
 export const PATHS = {
 
   // Authentication Routes
-  LOGIN: 'auth/login',
+  LOGIN: '/auth/login',
   REGISTER: '/auth/register',
   FORGOT_PASSWORD: '/auth/forgotpassword',
 
   // Home Routes
   INDEX: '/',
-  HOME: '/dashboard',
+  DASHBOARD: '/dashboard',
 
   // User and Profile Routes
   USER: '/user',

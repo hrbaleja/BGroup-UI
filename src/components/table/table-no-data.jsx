@@ -5,7 +5,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 
-import { COMPONETS_MSG } from 'src/constants/components';
+import { APIMESSAGES } from 'src/constants/messages';
 
 export default function TableNoData({ query }) {
   return (
@@ -18,7 +18,7 @@ export default function TableNoData({ query }) {
         >
           {query.length === 0 ? (
             <Typography variant="h4" paragraph>
-              {COMPONETS_MSG.NO_DATA}
+              {APIMESSAGES.NO_DATA}
             </Typography>
           ) :
             (

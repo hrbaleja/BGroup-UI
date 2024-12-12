@@ -6,11 +6,12 @@ import React, { useState } from 'react';
 
 import { Box, Card, Paper, Button, Snackbar, IconButton, Typography, CardContent, } from '@mui/material';
 
-import { COMPANY_NAME } from "src/constants/overview";
-
 import Iconify from 'src/components/iconify';
 
 import { logoBase64 } from "./logo";
+
+const APPNAME = import.meta.env.VITE_APP_NAME;
+
 
 // PDF Header function
 export function addPDFHeader(doc) {
@@ -22,7 +23,7 @@ export function addPDFHeader(doc) {
     doc.setTextColor('#FF6200');
     doc.setFont('Helvetica', 'bold');
 
-    const companyText = COMPANY_NAME;
+    const companyText = APPNAME;
     const textWidth = doc.getTextWidth(companyText);
     const xCenter = (doc.internal.pageSize.getWidth() - textWidth) / 2.5;
     doc.text(companyText, xCenter, 12);

@@ -7,11 +7,13 @@ export const PAGE_TITLES = {
   OTHER_INCOME: "Other Income Information",
   CREDENTIALS: "Credentials Information",
   PROFILE: "My Profile",
-  INDEX: "Minimal UI Kit",
   ERROR: "404 Page Not Found",
   ERRORLOG: "Recent Error Logs",
   HOME: 'HomePage',
   CONFIGURATION: "Configuration Setting",
+  FORGOTPWD: "Forgot Password",
+  LOGIN: "Login",
+  REGISTER: "Register",
 };
 
 export const SORTDIRECTION = {

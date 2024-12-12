@@ -12,9 +12,10 @@ import { useRouter } from 'src/routes/hooks';
 
 import { validateName, validateEmail, validatePassword, } from 'src/utils/validation';
 
+import { PAGE_TITLES } from 'src/constants/page';
+import { APIMESSAGES } from 'src/constants/messages';
 import { VALIDATION_MESSAGES } from 'src/validation';
 import authService from 'src/services/auth/authService';
-import { REGISTER, API_MESSAGES } from 'src/constants/auth';
 import { useNotification } from 'src/context/NotificationContext';
 
 import Iconify from 'src/components/iconify';
@@ -73,23 +74,23 @@ export default function RegisterView() {
       const response = await authService.register(userData);
       if (response.status === 201) {
 
-        showNotification(API_MESSAGES.REGISTER_SUCCESS, {
+        showNotification(APIMESSAGES.REGISTER_SUCCESS, {
           severity: 'success',
         });
         router.push(PATHS.HOME);
       }
       else {
-        showNotification(response.response.data?.message || API_MESSAGES.REGISTER_ERR, {
+        showNotification(response.response.data?.message || APIMESSAGES.REGISTER_ERR, {
           severity: 'error',
         });
-        setError(response.response.data?.message || API_MESSAGES.REGISTER_ERR);
+        setError(response.response.data?.message || APIMESSAGES.REGISTER_ERR);
       }
     }
     catch (response) {
-      showNotification(response.response.data?.message || API_MESSAGES.REGISTER_ERR, {
+      showNotification(response.response.data?.message || APIMESSAGES.REGISTER_ERR, {
         severity: 'error',
       });
-      setError(response.response.data?.message || API_MESSAGES.REGISTER_ERR);
+      setError(response.response.data?.message || APIMESSAGES.REGISTER_ERR);
     }
     finally {
       setIsLoading(false);
@@ -154,14 +155,14 @@ export default function RegisterView() {
         loading={isLoading}
         sx={{ my: 3 }}
       >
-        Register
+       {PAGE_TITLES.REGISTER}
       </LoadingButton>
     </form>
   );
 
   return (
     <AuthView
-      title={REGISTER}
+      title={PAGE_TITLES.REGISTER}
       linkText="Already have an account?"
       linkUrl={PATHS.LOGIN}
     >
