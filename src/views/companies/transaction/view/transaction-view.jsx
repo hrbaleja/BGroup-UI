@@ -191,7 +191,7 @@ export default function TransactionView() {
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor('#088F8F');
-    doc.text('One MobiKwik Systems Limited', doc.internal.pageSize.width / 2.4, 20, { align: 'center' });
+    // doc.text('One MobiKwik Systems Limited', doc.internal.pageSize.width / 2.4, 20, { align: 'center' });
     doc.setTextColor('#777');
 
     // Prepare table data
