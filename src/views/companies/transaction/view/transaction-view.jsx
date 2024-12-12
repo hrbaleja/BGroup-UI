@@ -225,7 +225,7 @@ export default function TransactionView() {
         1: { cellWidth: 30 },  // Name
         2: { cellWidth: 20, halign: 'center' },  // Lot Size
         3: { cellWidth: 28 },  // Applied Date
-        4: { cellWidth: 25 },  // Granted By
+        4: { cellWidth: 30 },  // Granted By
         5: { cellWidth: 26, halign: 'right' },  // Amount
         6: { cellWidth: 30 },  // Is Own
         7: { cellWidth: 30 },  // Is Alloted
