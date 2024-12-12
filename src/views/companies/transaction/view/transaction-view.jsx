@@ -238,7 +238,7 @@ export default function TransactionView() {
     doc.setTextColor('#088F8F');
     doc.setFont('helvetica', 'normal');
     doc.text(`Total Transactions: ${transactions.length}`, 14, pageHeight - 20);
-    doc.text(`Total Amount: ${totalAmount.toLocaleString()}`, 14, pageHeight - 10);
+    doc.text(`Total Amount: ${fCurrency(totalAmount)}`, 14, pageHeight - 10);
 
     // Save the PDF
     const filename = `Transactions_${dayjs().format('HHmmss')}.pdf`;
