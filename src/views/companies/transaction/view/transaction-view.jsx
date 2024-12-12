@@ -26,6 +26,7 @@ import dayjs from 'dayjs';
 import DataTableRow from '../datatable-row';
 import NewTransaction from '../transaction-new';
 import SDataTableRow from '../datatable-summary';
+import { fCurrency } from 'src/utils/format-number';
 
 export default function TransactionView() {
   const [page, setPage] = useState(0);
@@ -202,7 +203,7 @@ export default function TransactionView() {
       transaction.lotSize || 'N/A',
       dayjs(transaction.appliedDate).format('DD-MM-YYYY') || 'N/A',
       transaction.grantedBy?.name || 'N/A',
-      transaction.amount ? transaction.amount.toLocaleString() : 'N/A',
+      fCurrency(transaction.amount)  || 'N/A',
       transaction.applicationNo || 'N/A',
       transaction.remarks || 'UPI Self'
     ]);
