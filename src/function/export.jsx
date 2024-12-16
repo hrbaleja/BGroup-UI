@@ -9,10 +9,10 @@ export function addPDFHeader(doc) {
     const logoHeight = 20;
     doc.addImage(logoBase64, 'PNG', 2, 2, logoWidth, logoHeight);
 
-    doc.setFontSize(18);
+    doc.setFontSize(22);
     doc.setTextColor('#088F8F');
     doc.setFont('Helvetica', 'bold');
-    const companyText = 'One MobiKwik Systems Limited';
+    const companyText = APPNAME;
     const textWidth = doc.getTextWidth(companyText);
     const xCenter = (doc.internal.pageSize.getWidth() - textWidth) / 2.5;
     doc.text(companyText, xCenter, 12);
