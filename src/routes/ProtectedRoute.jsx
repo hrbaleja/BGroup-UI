@@ -7,6 +7,7 @@ import { Box, CircularProgress } from '@mui/material';
 
 import { Logout, SetCookies } from 'src/function/auth';
 import authService from 'src/services/auth/authService';
+const APP_URL = import.meta.env.VITE_APP_URL;
 
 import { PATHS } from './routes';
 
@@ -55,10 +56,9 @@ const ProtectedRoute = ({ children }) => {
    }
 
    if (!isAuthenticated) {
-      return <Navigate
-         to={`/${PATHS.LOGIN}?redirect=${encodeURIComponent(location.pathname)}`}
-         replace
-      />;
+      const redirectUrl = encodeURIComponent(location.pathname);
+      window.location.href = `${APP_URL}${PATHS.LOGIN}?redirect=${redirectUrl}`;  
+      return null;
    }
 
    return children;

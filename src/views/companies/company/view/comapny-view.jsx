@@ -82,11 +82,15 @@ export default function CompanyView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">{PAGE_TITLES.COMPANY}</Typography>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Typography>Show Past:</Typography>
-          <Switch checked={isArchived} onChange={(e) => setIsArchived(e.target.checked)} />
+      <Stack direction="row" alignItems="left" justifyContent="space-between" mb={3}
+        sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Typography variant="h4" sx={{ textAlign: 'centre', mb: 1 }}>{PAGE_TITLES.COMPANY}</Typography>
+        <Stack direction="row" spacing={0} alignItems="center"
+          sx={{ justifyContent: 'space-between', alignItems: 'center', }}>
+          <Stack direction="row" spacing={0} alignItems="center">
+            <Typography>Show Past:</Typography>
+            <Switch checked={isArchived} onChange={(e) => setIsArchived(e.target.checked)} />
+          </Stack>
           <Button
             variant="outlined"
             color="inherit"

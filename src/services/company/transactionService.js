@@ -8,8 +8,29 @@ const TransactionService = {
     return response.data;
   },
 
-  getTransactions: async () => {
-    const response = await api.get(`${TransactionService.baseUrl}`);
+  // getTransactions: async () => {
+  //   const response = await api.get(`${TransactionService.baseUrl}`);
+  //   return response.data;
+  // },
+
+  getTransactions: async (params = {}) => {
+    const { 
+      page = 1, 
+      limit = 10, 
+      search = '', 
+      sortBy = 'appliedDate',
+      order = 'desc' 
+    } = params;
+
+    const queryParams = new URLSearchParams({
+      page,
+      limit,
+      search,
+      sortBy,
+      order
+    }).toString();
+
+    const response = await api.get(`${TransactionService.baseUrl}?${queryParams}`);
     return response.data;
   },
 

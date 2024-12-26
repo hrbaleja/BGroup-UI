@@ -9,16 +9,16 @@ export function addPDFHeader(doc) {
     const logoHeight = 20;
     doc.addImage(logoBase64, 'PNG', 2, 2, logoWidth, logoHeight);
 
-    doc.setFontSize(22);
-    doc.setTextColor('#088F8F');
+    doc.setFontSize(26);
+    doc.setTextColor('#FF6200');
     doc.setFont('Helvetica', 'bold');
     const companyText = APPNAME;
     const textWidth = doc.getTextWidth(companyText);
     const xCenter = (doc.internal.pageSize.getWidth() - textWidth) / 2.5;
     doc.text(companyText, xCenter, 12);
 
-    doc.setFontSize(9);
-    doc.setTextColor('#088F8F');
+    doc.setFontSize(12);
+    doc.setTextColor('#777');
     doc.setFont('Helvetica', 'normal');
     const taglineText = '';
     const taglineWidth = doc.getTextWidth(taglineText);

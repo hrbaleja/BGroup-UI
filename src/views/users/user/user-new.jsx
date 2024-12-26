@@ -1,114 +1,144 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-
-import { Dialog, Button, TextField, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-
-import { validateForm } from 'src/validation/validation';
+import { Dialog, Button, TextField, DialogTitle, DialogContent, DialogActions, InputAdornment, IconButton, Typography } from '@mui/material';
+import { validateName, validateEmail, validatePassword } from 'src/utils/validation';
+import { APIMESSAGES } from 'src/constants/messages';
+import authService from 'src/services/auth/authService';
+import { useNotification } from 'src/context/NotificationContext';
+import Iconify from 'src/components/iconify';
+import { useRouter } from 'src/routes/hooks';
 
 export default function NewUser({ open, onClose, onSubmit }) {
-  const [entryData, setEntryData] = useState({
-    site: '',
-    username: '',
-    password: '',
-    description: '',
-  });
-
-  const validationRules = [
-    { field: 'site', required: true },
-    { field: 'username', required: true },
-    { field: 'password', required: true },
-
-  ];
+  const router = useRouter();
+  const { showNotification } = useNotification();
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [entryData, setEntryData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   const handleInputChange = (e) => {
     setEntryData({ ...entryData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: '' });
   };
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setEntryData({ ...entryData, [name]: value });
-  //   // Clear the error message for the current field if user starts typing
-  //   setErrors({ ...errors, [name]: '' });
-  // };
-
-  const handleSubmit = () => {
-    const newErrors = validateForm(entryData, validationRules);
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+  const handleSubmit = async () => {
+    setErrors({});
+    const { name, email, password, confirmPassword } = entryData;
+    
+    // Validate fields
+    if (!validateName(name)) {
+      setErrors(prev => ({ ...prev, name: 'Please enter a valid name' }));
+      return;
+    }
+    if (!validateEmail(email)) {
+      setErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+      return;
+    }
+    if (!validatePassword(password)) {
+      setErrors(prev => ({ ...prev, password: 'Password must be at least 8 characters long' }));
+      return;
+    }
+    if (password !== confirmPassword) {
+      setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
       return;
     }
 
-    onSubmit(entryData);
-    setEntryData({
-      site: '',
-      username: '',
-      password: '',
-      description: '',
-    });
+    setIsLoading(true);
+    onSubmit(entryData); 
+    setEntryData({ name: '', email: '', password: '', confirmPassword: '' });
+    onClose(); 
+    setIsLoading(false);
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Create Entry</DialogTitle>
+      <DialogTitle>Create User</DialogTitle>
       <DialogContent>
         <TextField
-          name="site"
-          label="Site"
-          value={entryData.site}
+          name="name"
+          label="Full Name"
+          value={entryData.name}
           onChange={handleInputChange}
           fullWidth
           margin="normal"
           required
-          error={Boolean(errors.site)}
-          helperText={errors.site}
+          error={Boolean(errors.name)}
+          helperText={errors.name}
         />
         <TextField
-          name="username"
-          label="Username"
-          value={entryData.username}
+          name="email"
+          label="Email Address"
+          value={entryData.email}
           onChange={handleInputChange}
           fullWidth
           margin="normal"
           required
-          error={Boolean(errors.username)}
-          helperText={errors.username}
+          error={Boolean(errors.email)}
+          helperText={errors.email}
         />
         <TextField
           name="password"
           label="Password"
+          type={showPassword ? 'text' : 'password'}
           value={entryData.password}
           onChange={handleInputChange}
           fullWidth
           margin="normal"
           required
-          type="password"
           error={Boolean(errors.password)}
           helperText={errors.password}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
-          name="description"
-          label="Description"
-          value={entryData.description}
+          name="confirmPassword"
+          label="Confirm Password"
+          type={showPassword ? 'text' : 'password'}
+          value={entryData.confirmPassword}
           onChange={handleInputChange}
           fullWidth
           margin="normal"
           required
-          error={Boolean(errors.description)}
-          helperText={errors.description}
+          error={Boolean(errors.confirmPassword)}
+          helperText={errors.confirmPassword}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       </DialogContent>
+      {Object.keys(errors).length > 0 && (
+        <Typography variant="body2" color="error" sx={{ mt: 1, ml: 2 }}>
+          Please fix the errors above
+        </Typography>
+      )}
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="outlined">
-          Create
+        <Button onClick={handleSubmit} variant="outlined" disabled={isLoading}>
+          {isLoading ? 'Saving...' : 'Save'}
         </Button>
       </DialogActions>
     </Dialog>
   );
-};
+}
 
 NewUser.propTypes = {
   open: PropTypes.bool.isRequired,

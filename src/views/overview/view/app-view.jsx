@@ -157,16 +157,18 @@ export default function AppView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, {username}
-        </Typography>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Tabs value={selectedTab} onChange={handleTabChange}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}
+        sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Typography variant="h4" sx={{ textAlign: 'centre', mb: 0 }}> Hi, {username}</Typography>
+        <Stack direction="row" spacing={0} alignItems="left"
+          sx={{ justifyContent: 'space-between', alignItems: 'left', }}>
+          <Stack direction="row" spacing={0} alignItems="left">
+            <Tabs value={selectedTab} onChange={handleTabChange}>
             <Tab label="Amount" />
             <Tab label="Companies" />
             <Tab label="Others" />
-          </Tabs>
+            </Tabs>
+          </Stack>
         </Stack>
       </Stack>
       {selectedTab === 0 && (

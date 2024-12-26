@@ -111,22 +111,6 @@ export default function UserView() {
 
   return (
     <Container maxWidth="xl">
-      {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
-        <Typography variant="h4">{PAGE_TITLES.USERS}</Typography>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Typography>Demat Users:</Typography>
-          <Switch checked={isDematUsers} onChange={(e) => setDematUsers(e.target.checked)} />
-          <Button
-            variant="outlined"
-            color="inherit"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-            onClick={() => setOpenCreateDialog(true)}
-          >
-            New
-          </Button>
-        </Stack>
-      </Stack> */}
-
       <Stack direction="row" alignItems="left" justifyContent="space-between" mb={3}
         sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
         <Typography variant="h4" sx={{ textAlign: 'centre', mb: 1 }}>{PAGE_TITLES.USERS}</Typography>

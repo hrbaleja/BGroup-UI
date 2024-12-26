@@ -29,8 +29,6 @@ export default function LanguagePopover() {
   return (
     <>
       <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen}>
-
-        {/* <iconify-icon icon="line-md:cog-filled-loop"></iconify-icon> */}
         <Iconify width={24} icon="line-md:cog-filled-loop" />
       </IconButton>
 
@@ -56,7 +54,6 @@ export default function LanguagePopover() {
           </Box>
         </MenuItem>
         <MenuItem onClick={() => handlenavigate(PATHS.CONFIGURATION)} >
-          {/* <MenuItem  onClick={() =>  setOpen(null)}> */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <Typography variant="body2">SMS Service</Typography>
             <Iconify width={24} icon="line-md:cloud-upload-loop" />
