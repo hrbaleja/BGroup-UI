@@ -12,9 +12,9 @@ import Iconify from 'src/components/iconify';
 
 
 const MENU_OPTIONS = [
-  { label: 'Home', icon: 'eva:home-fill', path: '' },
-  { label: 'Profile', icon: 'line-md:account-alert-loop', path: 'profile' },
-  { label: 'My Credential', icon: 'line-md:person-search', path: 'credential' },
+  { label: 'Home', icon: 'eva:home-fill', path: PATHS.DASHBOARD },
+  { label: 'Profile', icon: 'line-md:account-alert-loop', path: PATHS.PROFILE },
+  { label: 'My Credential', icon: 'line-md:person-search', path: PATHS.CREDENTIAL },
   // { label: 'Settings', icon: 'eva:settings-2-fill', path: 'profile' },
 ];
 

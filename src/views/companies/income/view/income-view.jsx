@@ -182,7 +182,7 @@ export default function IncomeView() {
       <NewIncome
         open={openCreateDialog}
         onClose={() => setOpenCreateDialog(false)}
-        transactions={transactions}
+        transactions={Array.isArray(transactions) ? transactions : []}
         onSubmit={createIncome}
       />
     </Container>

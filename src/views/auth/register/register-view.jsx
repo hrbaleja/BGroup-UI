@@ -77,7 +77,7 @@ export default function RegisterView() {
         showNotification(APIMESSAGES.REGISTER_SUCCESS, {
           severity: 'success',
         });
-        router.push(PATHS.HOME);
+        router.push(PATHS.LOGIN);
       }
       else {
         showNotification(response.response.data?.message || APIMESSAGES.REGISTER_ERR, {

@@ -39,7 +39,6 @@ export default function NewIncome({ open, onClose, onSubmit, transactions }) {
       setErrors(newErrors);
       return;
     }
-
     onSubmit(incomeData);
     setIncomeData(initialIncomeState);
   };
