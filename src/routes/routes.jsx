@@ -4,6 +4,7 @@ export const PATHS = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
   FORGOT_PASSWORD: '/auth/forgotpassword',
+  RESET_PASSWORD: '/auth/resetpassword/:token',
 
   // Home Routes
   INDEX: '/',

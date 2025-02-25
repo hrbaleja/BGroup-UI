@@ -73,17 +73,17 @@ export default function TransactionList({ transactions }) {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body1" fontSize={isMobile ? '0.5rem' : '1rem'}>
+                    <Typography variant="body1" fontSize={isMobile ? '0.5rem' : '1rem'} color="error.main">
                       {fCurrency(transaction.debit)}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body1" fontSize={isMobile ? '0.5rem' : '1rem'}>
+                    <Typography variant="body1" fontSize={isMobile ? '0.5rem' : '1rem'} color="success.main">
                       {fCurrency(transaction.credit)}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body1" fontSize={isMobile ? '0.5rem' : '1rem'}>
+                    <Typography variant="body1" fontSize={isMobile ? '0.5rem' : '1rem'} fontWeight="bold">
                       {fCurrency(transaction.balance)}
                     </Typography>
                   </TableCell>

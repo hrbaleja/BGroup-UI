@@ -26,33 +26,33 @@ export const navConfig = [
     icon: icon('ic_money'),
     category: CATEGORIES.ACCOUNT,
   },
-  {
-    title: 'Companies',
-    path: PATHS.COMPANIES,
-    icon: icon('ic_analytics'),
-    category: CATEGORIES.COMPANIES,
+  // {
+  //   title: 'Companies',
+  //   path: PATHS.COMPANIES,
+  //   icon: icon('ic_analytics'),
+  //   category: CATEGORIES.COMPANIES,
 
-  },
-  {
-    title: 'Transaction',
-    path: PATHS.TRANSACTION,
-    icon: icon('ic_transaction'),
-    category: CATEGORIES.COMPANIES,
+  // },
+  // {
+  //   title: 'Transaction',
+  //   path: PATHS.TRANSACTION,
+  //   icon: icon('ic_transaction'),
+  //   category: CATEGORIES.COMPANIES,
 
-  },
-  {
-    title: 'Income',
-    path: PATHS.INCOME,
-    icon: icon('ic_tr'),
-    category: CATEGORIES.COMPANIES,
-  },
-  {
-    title: 'Other Income',
-    path: PATHS.OTHER_INCOME,
-    icon: icon('ic_tr'),
-    category: CATEGORIES.OTHER,
+  // },
+  // {
+  //   title: 'Income',
+  //   path: PATHS.INCOME,
+  //   icon: icon('ic_tr'),
+  //   category: CATEGORIES.COMPANIES,
+  // },
+  // {
+  //   title: 'Other Income',
+  //   path: PATHS.OTHER_INCOME,
+  //   icon: icon('ic_tr'),
+  //   category: CATEGORIES.OTHER,
 
-  },
+  // },
 ];
 
 export default navConfig;

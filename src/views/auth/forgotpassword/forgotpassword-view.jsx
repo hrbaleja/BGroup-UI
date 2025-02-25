@@ -11,7 +11,7 @@ import { validateEmail } from 'src/utils/validation';
 
 import { PAGE_TITLES } from 'src/constants/page';
 import { VALIDATION_MESSAGES } from 'src/validation';
-import {APIMESSAGES,  } from 'src/constants/messages';
+import { APIMESSAGES, } from 'src/constants/messages';
 import authService from 'src/services/auth/authService';
 
 import { AuthView } from '../view';
@@ -22,7 +22,7 @@ const ForgotPasswordView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   const handleForgotPassword = async (e) => {
     e.preventDefault();
 
@@ -30,20 +30,19 @@ const ForgotPasswordView = () => {
       setError(VALIDATION_MESSAGES.EMAIL_REQUIRED);
       return;
     }
-  
+
     if (!validateEmail(email)) {
       setError(VALIDATION_MESSAGES.EMAIL_VALIDATE);
       return;
     }
-  
+
     try {
       setIsLoading(true);
       setError('');
       setSuccess('');
-  
-      await authService.forgotPassword(email);
+      await authService.forgotPassword({ email:email });
       setSuccess(APIMESSAGES.FORGOTPWD_SUCCESS);
-    } 
+    }
     catch (error) {
       setError(error.response?.data?.message || APIMESSAGES.FORGOTPWD_ERR);
     } finally {

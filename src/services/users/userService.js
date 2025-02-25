@@ -4,10 +4,10 @@ const UserService = {
     baseUrl: '/users',
 
 
-    fetchUsers: async (isDematUsers = true) => {
-        const response = await api.get(`${UserService.baseUrl}?isDematUsers=${isDematUsers ? 'yes' : 'no'}`);
+    fetchUsers: async (params) => {
+        const response = await api.get(UserService.baseUrl, { params });
         return response.data;
-    },
+      },
 
     updateUser: async (userId, updatedUser) => {
         const response = await api.put(`${UserService.baseUrl}/${userId}`, updatedUser);

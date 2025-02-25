@@ -89,6 +89,14 @@ const FILTER_CONFIG = {
       ],
       type: 'radio',
     },
+    isDematUsers: {
+      label: 'Demat Users',
+      options: [
+        { value: true, label: 'Yes' },
+        { value: false, label: 'No' }
+      ],
+      type: 'radio',
+    },
   },
   [PAGE_TITLES.INCOME]: {
     amount: {
@@ -164,9 +172,9 @@ export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCl
   const handleClearAll = () => {
     initializeFilters()
     setFilters({});
-    // if (typeof onFilter === 'function') {
-    //   onFilter({});
-    // }
+    if (typeof onFilter === 'function') {
+      onFilter({});
+    }
     onCloseFilter();
   };
 

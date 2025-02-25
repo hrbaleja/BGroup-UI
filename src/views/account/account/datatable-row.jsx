@@ -10,10 +10,12 @@ import {
 import PublicService from 'src/services/public/publicService';
 import { useNotification } from 'src/context/NotificationContext';
 import TransactionService from 'src/services/account/transactionService';
+import AccountsService from 'src/services/account/accountsService';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-
+import { fDate } from 'src/utils/format-time';
+import { fCurrency } from 'src/utils/format-number';
 import TransactionList from './transaction-list';
 
 const APP_URL = import.meta.env.VITE_APP_URL;
@@ -45,8 +47,11 @@ export default function DataTableRow({
   const [token, setToken] = useState('');
   const { showNotification } = useNotification();
 
+  const [openDeleteConfirmDialog, setOpenDeleteConfirmDialog] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
-  const handleGetTransactions = useCallback(async () => {
+  const getAccountTransaction = useCallback(async () => {
+    handleCloseMenu();
     try {
       const fetchedTransactions = await TransactionService.getTransactionsByCustomerId(id);
       setTransactions(fetchedTransactions);
@@ -56,13 +61,108 @@ export default function DataTableRow({
     }
   }, [id]);
 
-  const handleDetailsClick = useCallback(
-    (AccoutId) => {
-      handleCloseMenu();
-      handleGetTransactions(AccoutId);
-    },
-    [handleGetTransactions]
-  );
+  const deleteCustomerAccount = useCallback(async (accountId) => {
+    try {
+      await AccountsService.deleteCustomerAccount(accountId);
+      showNotification('Account deleted successfully!', { severity: 'success' });
+      fetchCustomer();
+    } catch (err) {
+      showNotification('Error deleting account!', { severity: 'error' });
+      console.error('Error deleting account:', err);
+    }
+  }, [fetchCustomer]);
+
+  const handleShareViaEmail = async (customerId) => {
+    handleCloseMenu();
+    try {
+      // Fetch transactions for the customer on the frontend
+      const fetchedTransactions = await TransactionService.getTransactionsByCustomerId(customerId);
+
+      if (!fetchedTransactions || fetchedTransactions.length === 0) {
+        showNotification('No transactions found for this account.', { severity: 'info' });
+        return;
+      }
+
+      // Generate HTML table for the transactions
+      const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #f0f8ff, #e6f7ff); padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+        <h3 style="color: #2c3e50; text-align: center; font-size: 26px; margin-bottom: 20px; font-weight: 600;">Your Recent Transactions</h3>
+        <table style="border-collapse: collapse; width: 100%; background-color: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+          <thead>
+            <tr style="background: linear-gradient(135deg, #6dd5ed, #2193b0); color: white;">
+              <th style="padding: 15px; text-align: left; font-weight: 600;">Date</th>
+              <th style="padding: 15px; text-align: left; font-weight: 600;">Description</th>
+              <th style="padding: 15px; text-align: left; font-weight: 600;">Debit</th>
+              <th style="padding: 15px; text-align: left; font-weight: 600;">Credit</th>
+              <th style="padding: 15px; text-align: left; font-weight: 600;">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${fetchedTransactions
+              .map(
+                (transaction) => `
+                  <tr style="border-bottom: 1px solid #eee; transition: background-color 0.3s;">
+                    <td style="padding: 12px; color: #555;">${fDate(transaction.txnDate)}</td>
+                    <td style="padding: 12px; color: #555;">${transaction.description}</td>
+                    <td style="padding: 12px; color: #555;">${transaction.debit ? fCurrency(transaction.debit) : "-"}</td>
+                    <td style="padding: 12px; color: #555;">${transaction.credit ? fCurrency(transaction.credit) : "-"}</td>
+                    <td style="padding: 12px; color: #555; font-weight: 500;">${fCurrency(transaction.balance)}</td>
+                  </tr>`
+              )
+              .join("")}
+          </tbody>
+        </table>
+        <div style="text-align: center; margin-top: 25px;">
+          <a href="#" style="background: linear-gradient(135deg, #6dd5ed, #2193b0); color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; display: inline-block; font-weight: 500; transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            View Full Statement
+          </a>
+        </div>
+        <div style="text-align: center; margin-top: 25px; font-size: 12px; color: #777;">
+          <p>If you have any questions, feel free to <a href="#" style="color: #2193b0; text-decoration: none;">contact our support team</a>.</p>
+          <p>&copy; 2025 B Group Pvt. Ltd. All rights reserved.</p>
+        </div>
+      </div>
+    `;
+    console.log(htmlContent)
+      // Prepare email data payload
+      const emailData = {
+        to: 'hrbaleja.04@gmail.com',
+        subject: 'Your Transaction Details',
+        html: htmlContent, // Pass the HTML content directly
+      };
+
+      // // Send email using the backend API
+      const response = await AccountsService.sendTransactionEmail(emailData);
+      if (response.success) {
+        showNotification('Email sent successfully!', { severity: 'success' });
+      } else {
+        showNotification('Failed to send email!', { severity: 'error' });
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      showNotification('Failed to send email!', { severity: 'error' });
+    }
+  };
+
+  // Open confirmation dialog before deleting
+  const handleDeleteAccountClick = (accountId) => {
+    setDeleteConfirmId(accountId);
+    setOpenDeleteConfirmDialog(true);
+  };
+
+  // Confirm account deletion
+  const handleConfirmDelete = () => {
+    if (deleteConfirmId) {
+      deleteCustomerAccount(deleteConfirmId);
+      setOpenDeleteConfirmDialog(false);
+    }
+  };
+
+  // Close confirmation dialog without deleting
+  const handleCancelDelete = () => {
+    setOpenDeleteConfirmDialog(false);
+    setDeleteConfirmId(null);
+  };
 
   const handleOpenDialog = useCallback(() => {
     handleCloseMenu();
@@ -144,10 +244,20 @@ export default function DataTableRow({
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{ sx: { width: 140 } }}
       >
-        <MenuItem onClick={() => handleDetailsClick(id)} sx={{ color: 'info.main' }}>
+        <MenuItem onClick={() => getAccountTransaction(id)} sx={{ color: 'info.main' }}>
           <Iconify icon="eva:info-fill" sx={{ mr: 2 }} />
           Details
         </MenuItem>
+        <MenuItem onClick={() => handleShareViaEmail(id)} sx={{ color: 'primary.darker' }}>
+          <Iconify icon="fluent:mail-28-filled" sx={{ mr: 2 }} />
+          E-mail
+        </MenuItem>
+        {parseFloat(balance) === 0 && (
+          <MenuItem onClick={() => handleDeleteAccountClick(id)} sx={{ color: 'error.main' }}>
+            <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
+            Delete
+          </MenuItem>
+        )}
         <MenuItem onClick={handleOpenDialog}>
           <Iconify icon="eva:plus-fill" sx={{ mr: 2 }} />
           Transaction
@@ -161,12 +271,30 @@ export default function DataTableRow({
       </Popover>
 
       <Dialog
+        open={openDeleteConfirmDialog}
+        onClose={handleCancelDelete}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this account? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} variant="outlined">Cancel</Button>
+          <Button onClick={handleConfirmDelete} color="error" variant="outlined">
+            Confirm Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
         open={openTransactionView}
         onClose={() => setOpenTransactionView(false)}
         PaperProps={{
           sx: {
-            minWidth: { xs: '90%', sm: '800px' },
-            maxWidth: { xs: '90%', sm: '800px' },
+            minWidth: { xs: '95%', sm: '800px' },
+            maxWidth: { xs: '95%', sm: '800px' },
           },
         }}
       >

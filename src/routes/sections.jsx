@@ -11,6 +11,7 @@ import ProtectedRoute from './ProtectedRoute';
 export const LoginPage = lazy(() => import('src/pages/auth/loginPage'));
 export const RegisterPage = lazy(() => import('src/pages/auth/registerPage'));
 export const ForgotPasswordPage = lazy(() => import('src/pages/auth/forgotpasswordPage'));
+export const ResetPasswordPage = lazy(() => import('src/pages/auth/resetpasswordPage'));
 
 // Home Pages
 export const DashboardPage = lazy(() => import('src/pages/home/appPage'));
@@ -186,6 +187,10 @@ export default function Router() {
     {
       path: PATHS.FORGOT_PASSWORD,
       element: isAuthenticated ? <Navigate to={PATHS.INDEX} replace /> : <ForgotPasswordPage />,
+    },
+    {
+      path: PATHS.RESET_PASSWORD,
+      element: isAuthenticated ? <Navigate to={PATHS.INDEX} replace /> : <ResetPasswordPage />,
     },
     {
       path: PATHS.PAGE_404,

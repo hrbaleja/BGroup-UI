@@ -14,12 +14,7 @@ const AccountsService = {
   },
 
   fetchCustomersdropdown: async () => {
-    const response = await api.get(`${AccountsService.baseUrl}/drop`);
-    return response.data;
-  },
-
-  fetchCustomerDetails: async (customerId) => {
-    const response = await api.get(`${AccountsService.baseUrl}/tr/${customerId}`);
+    const response = await api.get(`${AccountsService.baseUrl}/getallaccount`);
     return response.data;
   },
 
@@ -27,6 +22,16 @@ const AccountsService = {
     const response = await api.get(`${AccountsService.baseUrl}/getnoncustomer`);
     return response.data;
   },
+
+  deleteCustomerAccount: async (accountId) => {
+    const response = await api.delete(`${AccountsService.baseUrl}/${accountId}`);
+    return response.data; 
+  },
+
+  sendTransactionEmail: async (accountId) => {
+    const response = await api.post(`${AccountsService.baseUrl}/sendmail`,accountId);
+    return response.data; 
+  }
 };
 
 export default AccountsService;

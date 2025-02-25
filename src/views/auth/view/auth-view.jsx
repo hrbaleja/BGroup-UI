@@ -43,7 +43,7 @@ const AuthView = ({ children, title, linkText, linkUrl }) => {
                 <Stack alignItems="center" justifyContent="center">
                     <Card sx={{ p: 5, width: 1, maxWidth: 420, minWidth: 380, }}>
                         <Typography variant="h4" textAlign="center">
-                            {title === PAGE_TITLES.FORGOTPWD ? APPNAME : `${title} to ${APPNAME}`}
+                            {(title === PAGE_TITLES.FORGOTPWD || title === PAGE_TITLES.RESETPWD) ? APPNAME : `${title} to ${APPNAME}`}
                         </Typography>
 
                         <Typography variant="body2" sx={{ mt: 2, mb: 5 }} />

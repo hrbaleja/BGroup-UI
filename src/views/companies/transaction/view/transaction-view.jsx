@@ -51,7 +51,7 @@ export default function TransactionView() {
         companyService.getCompanies(),
       ]);
 
-      setUsers(usersResponse);
+      setUsers(usersResponse.docs);
       setCompanies(companiesResponse);
 
       const dynamicSortOptions = companiesResponse.slice(0, 4).map((company) => ({

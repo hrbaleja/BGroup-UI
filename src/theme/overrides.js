@@ -142,5 +142,12 @@ export function overrides(theme) {
         },
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          maxHeight: 250,
+        },
+      },
+    },
   };
 }

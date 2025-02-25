@@ -13,6 +13,16 @@ const authService = {
     const response = await api.post('/auth/refreshtoken', { refreshToken })
     return response.data
   },
+
+  forgotPassword: async (usermail) => {
+    const response = await api.post('/auth/forgotpassword', usermail)
+    return response.data
+  },
+  resetPassword: async (userdata) => {
+    const response = await api.post('/auth/resetpassword', userdata)
+    return response.data
+  },
+
   
 };
 

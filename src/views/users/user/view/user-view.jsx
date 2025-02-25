@@ -36,9 +36,14 @@ export default function UserView() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [users, setUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const [filters, setFilters] = useState({ isVerified: true, isActive: true, role: [] });
-  const [isDematUsers, setDematUsers] = useState(false);
+  const [filters, setFilters] = useState({
+    isVerified: '',
+    isActive: '',
+    role: [],
+    isDematUsers: ''
+  });
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -48,16 +53,20 @@ export default function UserView() {
         sortBy: orderBy,
         sortOrder: order,
         name: filterName,
-        role: filters.role,
+        // Only include role filter if there are selected roles
+        role: filters.role.join(','),
+        isVerified: filters.isVerified,
         isActive: filters.isActive,
-        isVerified: filters.isVerified
+        hasDematAccount: filters.isDematUsers
       };
-      const response = await UserService.fetchUsers(isDematUsers, filterParams);
-      setUsers(response);
+
+      const response = await UserService.fetchUsers(filterParams);
+      setUsers(response.docs);
+      setTotalUsers(response.totalDocs);
     } catch (error) {
       console.error('Error fetching Users:', error);
     }
-  }, [isDematUsers, page, rowsPerPage, order, orderBy, filterName, filters]);
+  }, [page, rowsPerPage, order, orderBy, filterName, filters]);
 
   useEffect(() => {
     fetchUsers();
@@ -84,8 +93,8 @@ export default function UserView() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const handleFilterByName = (value) => {
@@ -109,31 +118,24 @@ export default function UserView() {
     setPage(0);
   };
 
+
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" alignItems="left" justifyContent="space-between" mb={3}
-        sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
-        <Typography variant="h4" sx={{ textAlign: 'centre', mb: 1 }}>{PAGE_TITLES.USERS}</Typography>
-        <Stack direction="row" spacing={0} alignItems="center"
-          sx={{ justifyContent: 'space-between', alignItems: 'center', }}>
-          <Stack direction="row" spacing={0} alignItems="center">
-            <Typography>Demat Users:</Typography>
-            <Switch
-              checked={isDematUsers}
-              onChange={(e) => setDematUsers(e.target.checked)}
-            />
-          </Stack>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Typography variant="h4">{PAGE_TITLES.USERS}</Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
           <Button
             variant="outlined"
             color="inherit"
             startIcon={<Iconify icon="eva:plus-fill" />}
             onClick={() => setOpenCreateDialog(true)}
+            aria-label="Create new account"
           >
             New
           </Button>
+
         </Stack>
       </Stack>
-
       <Card>
         {!isNoData && (
           <TableToolbar
@@ -158,21 +160,19 @@ export default function UserView() {
               )}
 
               <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <DataTableRow
-                      key={row._id}
-                      {...row}
-                      id={row._id}
-                      avatarUrl={`/assets/images/avatars/avatar_${row.role}.jpg`}
-                      fetchUsers={fetchUsers}
-                    />
-                  ))}
+                {dataFiltered.map((row) => (
+                  <DataTableRow
+                    key={row._id}
+                    {...row}
+                    id={row._id}
+                    avatarUrl={`/assets/images/avatars/avatar_${row.role}.jpg`}
+                    fetchUsers={fetchUsers}
+                  />
+                ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={0} 
                 />
 
                 {(isNotFound || isNoData) && <TableNoData query={filterName} />}
@@ -185,7 +185,7 @@ export default function UserView() {
           <TablePagination
             page={page}
             component="div"
-            count={users.length}
+            count={totalUsers} 
             rowsPerPage={rowsPerPage}
             onPageChange={handleChangePage}
             rowsPerPageOptions={[5, 10, 20]}
