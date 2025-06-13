@@ -15,21 +15,21 @@ export const navConfig = [
     category: CATEGORIES.GENERAL,
   },
   {
-    title: 'user',
+    title: 'User',
     path: PATHS.USER,
-    icon: icon('ic_group'),
+    icon: icon('ic_user'),
     category: CATEGORIES.GENERAL,
   },
   {
     title: 'Account',
     path: PATHS.ACCOUNT,
-    icon: icon('ic_money'),
+    icon: icon('ic_account'),
     category: CATEGORIES.ACCOUNT,
   },
   // {
   //   title: 'Companies',
   //   path: PATHS.COMPANIES,
-  //   icon: icon('ic_analytics'),
+  //   icon: icon('ic_companies'),
   //   category: CATEGORIES.COMPANIES,
 
   // },
@@ -43,16 +43,21 @@ export const navConfig = [
   // {
   //   title: 'Income',
   //   path: PATHS.INCOME,
-  //   icon: icon('ic_tr'),
+  //   icon: icon('ic_income2'),
   //   category: CATEGORIES.COMPANIES,
   // },
-  // {
-  //   title: 'Other Income',
-  //   path: PATHS.OTHER_INCOME,
-  //   icon: icon('ic_tr'),
-  //   category: CATEGORIES.OTHER,
-
-  // },
+  {
+    title: 'Source',
+    path: PATHS.OTHER_INCOME,
+    icon: icon('ic_income'),
+    category: CATEGORIES.OTHER,
+  },
+  {
+    title: 'Contacts',
+    path: PATHS.CONTACTS,
+    icon: icon('contacts'),
+    category: CATEGORIES.USER,
+  },
 ];
 
 export default navConfig;

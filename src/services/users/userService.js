@@ -3,7 +3,6 @@ import api from '../config';
 const UserService = {
     baseUrl: '/users',
 
-
     fetchUsers: async (params) => {
         const response = await api.get(UserService.baseUrl, { params });
         return response.data;

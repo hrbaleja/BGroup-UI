@@ -27,7 +27,7 @@ export default function AccountView() {
   const [selectedUser, setSelectedUser] = useState('');
   const [customer, setCustomer] = useState([]);
   const [toDate, setToDate] = useState(dayjs());
-  const [fromDate, setFromDate] = useState(dayjs().startOf('month'));
+  const [fromDate, setFromDate] = useState(dayjs().startOf('year'));
   const [selectedUserInfo, setSelectedUserInfo] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const navigate = useNavigate();

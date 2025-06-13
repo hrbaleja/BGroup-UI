@@ -13,6 +13,7 @@ import { NAV, HEADER } from './config-layout';
 import AccountPopover from './common/account-popover';
 // import LanguagePopover from './common/language-popover';
 // import ContactPopover from './common/contact-popover';
+import ContactPopover from 'src/views/users/contact/ContactBookPopover';
 import SettingsPopover from './common/settings-popover';
 import NotificationsPopover from './common/notifications-popover';
 
@@ -35,7 +36,7 @@ export default function Header({ onOpenNav }) {
       <Stack direction="row" alignItems="center" spacing={1}>
         {/* <LanguagePopover /> */}
         <SettingsPopover />
-        {/* <ContactPopover/> */}
+        <ContactPopover />
         <NotificationsPopover />
         <AccountPopover />
       </Stack>

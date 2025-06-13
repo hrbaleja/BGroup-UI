@@ -14,6 +14,7 @@ export const PATHS = {
   USER: '/user',
   PROFILE: '/profile',
   CREDENTIAL: '/credential',
+  CONTACTS: '/contacts',
 
   // Company and Financial Routes
   COMPANIES: '/companies',

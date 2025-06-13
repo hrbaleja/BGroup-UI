@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import TaskService from 'src/services/overview/TaskService';
 import SectorService from 'src/services/overview/sectorService';
 import CompanyStatisticsService from 'src/services/overview/dashboard';
 
@@ -30,7 +29,6 @@ import AppConversionRates from '../app-conversion-rates';
 // ----------------------------------------------------------------------
 
 export default function AppView() {
-  const [taskss, setTasks] = useState([]);
   const [statistics, setStatistics] = useState({});
   const [sectorData, setSectorData] = useState([]);
   const [totalValue, setTotalValue] = useState(0);
@@ -56,15 +54,6 @@ export default function AppView() {
       setChartData(chartDatas);
     } catch (error) {
       console.error('Error fetching company statistics:', error);
-    }
-  }, []);
-
-  const fetchTasks = useCallback(async () => {
-    try {
-      const fetchedTasks = await TaskService.getTasks();
-      setTasks(fetchedTasks);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
     }
   }, []);
 
@@ -98,11 +87,11 @@ export default function AppView() {
   }, []);
 
   useEffect(() => {
-    fetchTasks();
+    // fetchTasks();
     fetchCompany();
     fetchSector();
     fetchSectorData();
-  }, [fetchTasks, fetchCompany, fetchSector, fetchSectorData]);
+  }, [fetchCompany, fetchSector, fetchSectorData]);
 
   const transformChartData = (data) => {
     const currentYear = new Date().getFullYear();
@@ -164,9 +153,9 @@ export default function AppView() {
           sx={{ justifyContent: 'space-between', alignItems: 'left', }}>
           <Stack direction="row" spacing={0} alignItems="left">
             <Tabs value={selectedTab} onChange={handleTabChange}>
-            <Tab label="Amount" />
-            <Tab label="Companies" />
-            <Tab label="Others" />
+              <Tab label="Amount" />
+              <Tab label="Companies" />
+              <Tab label="Others" />
             </Tabs>
           </Stack>
         </Stack>
@@ -271,7 +260,7 @@ export default function AppView() {
           <Grid xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Total Companies"
-              subheader="Main and SME IPO Count"
+              subheader="Main and SME IPO Count for the current year"
               chart={{
                 labels: chartData.labels,
                 series: [
@@ -352,7 +341,7 @@ export default function AppView() {
       {selectedTab === 2 && (
         <Grid container spacing={3}>
           <Grid xs={12} md={6} lg={8}>
-            <AppTasks title="Tasks" subheader={`You have ${taskss.length} pending tasks`} />
+            <AppTasks title="Tasks" />
           </Grid>
           <WordSorter />
           <Grid xs={12} md={6} lg={8}>

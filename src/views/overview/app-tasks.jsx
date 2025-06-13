@@ -18,6 +18,7 @@ export default function AnalyticsTasks({ title, ...other }) {
   const [tasks, setTasks] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  
 
   useEffect(() => {
     fetchTasks();
@@ -60,7 +61,7 @@ export default function AnalyticsTasks({ title, ...other }) {
   };
 
   const handleUpdateTask = async (taskData) => {
-  
+
     try {
       await TaskService.updateTask(taskData.id, taskData);
       fetchTasks();
@@ -94,7 +95,7 @@ export default function AnalyticsTasks({ title, ...other }) {
         title={title}
         subheader={subheader}
         action={
-          <Button  color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => handleOpenForm()}>
+          <Button color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => handleOpenForm()}>
             New
           </Button>
         }
@@ -104,7 +105,7 @@ export default function AnalyticsTasks({ title, ...other }) {
         <TaskItem
           key={task._id}
           task={task}
-          onEdit={() => handleOpenForm(task,task._id)}
+          onEdit={() => handleOpenForm(task, task._id)}
           onDelete={() => handleDeleteTask(task._id)}
           onComplete={handleCompleteTask}
         />

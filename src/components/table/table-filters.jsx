@@ -139,6 +139,7 @@ const FILTER_CONFIG = {
     },
   },
 };
+
 export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCloseFilter, onFilter }) {
   const [filters, setFilters] = useState({});
 
@@ -149,9 +150,17 @@ export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCl
   const initializeFilters = (filterType) => {
     const filterConfig = FILTER_CONFIG[filterType] || {};
     const initialState = {};
-    Object.keys(filterConfig).forEach((key) => {
-      initialState[key] = '';
+    
+    Object.entries(filterConfig).forEach(([key, config]) => {
+      if (config.type === 'checkbox') {
+        // Initialize checkbox filters as empty arrays
+        initialState[key] = [];
+      } else {
+        // Initialize radio filters as empty strings
+        initialState[key] = '';
+      }
     });
+    
     return initialState;
   };
 
@@ -170,10 +179,10 @@ export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCl
   };
 
   const handleClearAll = () => {
-    initializeFilters()
-    setFilters({});
+    const clearedFilters = initializeFilters(filterFor);
+    setFilters(clearedFilters);
     if (typeof onFilter === 'function') {
-      onFilter({});
+      onFilter(clearedFilters);
     }
     onCloseFilter();
   };
@@ -192,11 +201,12 @@ export default function TableFilters({ filterFor, openFilter, onOpenFilter, onCl
                   key={option.value}
                   control={
                     <Checkbox
-                      checked={filters[filterKey]?.includes(option.value)}
+                      checked={(filters[filterKey] || []).includes(option.value)}
                       onChange={(e) => {
+                        const currentValues = filters[filterKey] || [];
                         const value = e.target.checked
-                          ? [...(filters[filterKey] || []), option.value]
-                          : (filters[filterKey] || []).filter(item => item !== option.value);
+                          ? [...currentValues, option.value]
+                          : currentValues.filter(item => item !== option.value);
                         handleFilterChange(filterKey, value);
                       }}
                     />

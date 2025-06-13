@@ -14,7 +14,8 @@ export const PAGE_TITLES = {
   FORGOTPWD: "Forgot Password",
   LOGIN: "Login",
   REGISTER: "Register",
-  RESETPWD:'Reset Password'
+  RESETPWD: 'Reset Password',
+  CONTACTS: 'Customer Contact Information'
 };
 
 export const SORTDIRECTION = {

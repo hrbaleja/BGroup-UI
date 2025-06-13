@@ -54,7 +54,7 @@ export default function UserView() {
         sortOrder: order,
         name: filterName,
         // Only include role filter if there are selected roles
-        role: filters.role.join(','),
+        role: Array.isArray(filters.role) ? filters.role.join(',') : '',
         isVerified: filters.isVerified,
         isActive: filters.isActive,
         hasDematAccount: filters.isDematUsers
@@ -137,16 +137,13 @@ export default function UserView() {
         </Stack>
       </Stack>
       <Card>
-        {!isNoData && (
-          <TableToolbar
-            filterName={filterName}
-            onFilterName={handleFilterByName}
-            filters={filters}
-            onFilter={handleFilter}
-            filterFor={PAGE_TITLES.USERS}
-          />
-        )}
-
+        <TableToolbar
+          filterName={filterName}
+          onFilterName={handleFilterByName}
+          filters={filters}
+          onFilter={handleFilter}
+          filterFor={PAGE_TITLES.USERS}
+        />
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
@@ -172,7 +169,7 @@ export default function UserView() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={0} 
+                  emptyRows={0}
                 />
 
                 {(isNotFound || isNoData) && <TableNoData query={filterName} />}
@@ -185,7 +182,7 @@ export default function UserView() {
           <TablePagination
             page={page}
             component="div"
-            count={totalUsers} 
+            count={totalUsers}
             rowsPerPage={rowsPerPage}
             onPageChange={handleChangePage}
             rowsPerPageOptions={[5, 10, 20]}

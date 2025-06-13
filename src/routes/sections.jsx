@@ -21,6 +21,7 @@ export const IndexPage = lazy(() => import('src/pages/home/homePage'));
 export const UserPage = lazy(() => import('src/pages/users/userPage'));
 export const ProfilePage = lazy(() => import('src/pages/users/profilePage'));
 export const CredentialPage = lazy(() => import('src/pages/users/credentialPage'));
+export const ContactPage = lazy(() => import('src/pages/users/contactPage'));
 
 // Company and Financial Pages
 export const CompanyPage = lazy(() => import('src/pages/company/companyPage'));
@@ -174,6 +175,14 @@ export default function Router() {
             </ProtectedRoute>
           ),
         },
+        {
+          path: PATHS.CONTACTS,
+          element: (
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ContactPage />
+            </ProtectedRoute>
+          ),
+        },
       ],
     },
     {
@@ -202,7 +211,7 @@ export default function Router() {
     },
     {
       path: PATHS.INDEX,
-      element: isAuthenticated ? <DashboardLayout /> : <IndexPage />,
+      element: isAuthenticated ? <Navigate to={PATHS.DASHBOARD} replace /> : <IndexPage />,
     },
     {
       path: PATHS.CUSTOMER,
